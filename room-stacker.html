@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Room Stacker — Douglas Larsen</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#fff2eb;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
+    --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);overflow:hidden;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none;touch-action:none}
+  a{color:inherit;text-decoration:none}
+  .top{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 22px;z-index:5}
+  .brand{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:700}
+  .brand b{color:var(--blue)}
+  .back{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);border:1px solid rgba(16,16,24,.18);border-radius:40px;padding:8px 16px}
+  .back:hover{border-color:var(--blue);color:var(--blue)}
+  .stage{position:relative;box-shadow:0 20px 60px rgba(58,48,232,.14);border:1px solid rgba(58,48,232,.18);border-radius:6px;overflow:hidden}
+  canvas{display:block}
+  .hud{position:absolute;top:0;left:0;right:0;padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
+  .score{font-family:var(--serif);font-size:44px;font-weight:600;line-height:.9;color:var(--blue)}
+  .score small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px}
+  .best{text-align:right;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+  .hint{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);pointer-events:none;transition:opacity .4s}
+  .over{position:absolute;inset:0;background:rgba(255,242,235,.92);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+  .over.show{display:flex}
+  .over h1{font-family:var(--serif);font-size:52px;font-weight:600;line-height:1;text-transform:uppercase}
+  .over p{margin-top:14px;color:var(--ink-soft);font-size:15px}
+  .over .big{font-family:var(--serif);font-size:80px;color:var(--blue);line-height:1;margin:10px 0}
+  .btn{margin-top:22px;display:inline-block;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+    padding:15px 34px;border:1px solid var(--blue);color:#fff;background:var(--blue);border-radius:40px;cursor:pointer;pointer-events:auto}
+  .btn:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
+  .btn.ghost{background:none;color:var(--blue);margin-left:10px}
+  .btn.ghost:hover{background:var(--blue);color:#fff}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand">Douglas <b>Larsen</b> · Room Stacker</div>
+    <a class="back" href="index.html">← Back to site</a>
+  </div>
+
+  <div class="stage" id="stage">
+    <canvas id="c"></canvas>
+    <div class="hud">
+      <div class="score"><span id="score">0</span><small>Stacked</small></div>
+      <div class="best">Best<br><span id="best">0</span></div>
+    </div>
+    <div class="hint" id="hint">Tap / Space to drop</div>
+    <div class="over" id="over">
+      <h1>Timber!</h1>
+      <div class="big" id="finalScore">0</div>
+      <p id="overMsg">A piece hit the floor.</p>
+      <div>
+        <button class="btn" id="again">Play Again</button>
+        <a class="btn ghost" href="index.html">Exit</a>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script>
+const {Engine,Render,Runner,Bodies,Body,Composite,Events}=Matter;
+const W=460,H=720;
+const PLATFORM_TOP=582, FAIL_Y=690;      // world y where a fallen piece = game over
+const COLORS=['#3a30e8','#6f66ff','#660000','#c5cf17','#006442','#cfd6ff','#eb593d'];
+const ROOM_TPLS=['living','bedroom','dining','kitchen','office','bath'];
+
+const canvas=document.getElementById('c');
+const engine=Engine.create();
+engine.gravity.y=1.1;
+const render=Render.create({canvas,engine,options:{width:W,height:H,
+  pixelRatio:Math.min(window.devicePixelRatio||1,2),
+  wireframes:false,background:'#fff2eb',hasBounds:true}});
+render.bounds.min={x:0,y:0}; render.bounds.max={x:W,y:H};
+const ctx=render.context;
+
+let platform, camY, camTarget, score, best, state, cur, preview, dropAt, over;
+best=Number(localStorage.getItem('rs_best')||0); document.getElementById('best').textContent=best;
+
+function reset(){
+  Composite.clear(engine.world,false);
+  camY=0; camTarget=0; score=0; state='aim'; cur=null; over=false;
+  document.getElementById('score').textContent='0';
+  document.getElementById('over').classList.remove('show');
+  document.getElementById('hint').style.opacity='1';
+  platform=Bodies.rectangle(W/2,PLATFORM_TOP+20,190,40,{isStatic:true,
+    friction:1,render:{fillStyle:'#efe6da',strokeStyle:'#3a30e8',lineWidth:2}});
+  // legs (visual)
+  Composite.add(engine.world,[platform]);
+  newPreview();
+}
+function newPreview(){
+  const tpl=ROOM_TPLS[(Math.random()*ROOM_TPLS.length)|0];
+  const w=Math.round(86+Math.random()*64);   // 86–150 wide room
+  const h=Math.round(52+Math.random()*34);   // 52–86 tall
+  preview={w,h,tpl,x:W/2,color:COLORS[(Math.random()*COLORS.length)|0],t:Math.random()*6};
+  state='aim';
+}
+function drop(){
+  if(over||state!=='aim'||!preview) return;
+  const y=camY+95;
+  const b=Bodies.rectangle(preview.x,y,preview.w,preview.h,{
+    chamfer:{radius:4},friction:0.9,frictionStatic:1,restitution:0.02,density:0.0016,
+    render:{visible:false}});
+  b.plan={w:preview.w,h:preview.h,tpl:preview.tpl,color:preview.color};
+  Body.setAngularVelocity(b,(Math.random()-0.5)*0.03);
+  Composite.add(engine.world,b);
+  cur=b; dropAt=performance.now(); state='drop';
+  document.getElementById('hint').style.opacity='0';
+  beep(300,0.05,'square');
+}
+function towerTop(){
+  let t=PLATFORM_TOP;
+  for(const b of Composite.allBodies(engine.world)){
+    if(b.isStatic||!b.placed) continue;   // only settled pieces move the camera
+    if(b.bounds.min.y<t) t=b.bounds.min.y;
+  }
+  return t;
+}
+function gameOver(msg){
+  over=true; state='done';
+  if(score>best){best=score;localStorage.setItem('rs_best',best);}
+  document.getElementById('best').textContent=best;
+  document.getElementById('finalScore').textContent=score;
+  document.getElementById('overMsg').textContent=msg;
+  document.getElementById('over').classList.add('show');
+  buzz();
+}
+
+Events.on(render,'beforeRender',()=>{
+  // camera follow: keep tower top ~260px from view top
+  camTarget=Math.min(0, towerTop()-260);
+  camY+=(camTarget-camY)*0.09;
+  render.bounds.min.y=camY; render.bounds.max.y=camY+H;
+  render.bounds.min.x=0; render.bounds.max.x=W;
+});
+
+Events.on(engine,'afterUpdate',()=>{
+  if(over) return;
+  // fail check: any dynamic piece fell past the floor
+  for(const b of Composite.allBodies(engine.world)){
+    if(b.isStatic) continue;
+    if(b.position.y>FAIL_Y){ gameOver('A piece hit the floor.'); return; }
+  }
+  if(state==='drop'&&cur){
+    const alive=performance.now()-dropAt;
+    if(alive>350 && cur.speed<0.5 && cur.angularSpeed<0.05){
+      // settled
+      cur.placed=true;
+      score++; document.getElementById('score').textContent=score;
+      ding(320+score*8);
+      cur=null; newPreview();
+    }
+  }
+});
+
+// draw every room piece + preview + floor on top of the physics render
+Events.on(render,'afterRender',()=>{
+  const c=ctx; c.save();
+  c.strokeStyle='rgba(58,48,232,.25)'; c.lineWidth=1;
+  c.beginPath(); c.moveTo(0,PLATFORM_TOP+42-camY); c.lineTo(W,PLATFORM_TOP+42-camY); c.stroke();
+  for(const b of Composite.allBodies(engine.world)){
+    if(b.isStatic||!b.plan) continue;
+    c.save(); c.translate(b.position.x,b.position.y-camY); c.rotate(b.angle);
+    drawRoom(c,b.plan.w,b.plan.h,b.plan.tpl,b.plan.color); c.restore();
+  }
+  if(state==='aim'&&preview){
+    const sw=Math.min(0.09,0.024+score*0.0018); // slow at first, quicker as tower grows
+    preview.t+=sw;
+    preview.x=W/2+Math.sin(preview.t)*(W/2-preview.w/2-24);
+    const sy=95;
+    c.save(); c.globalAlpha=0.96; c.translate(preview.x,sy);
+    drawRoom(c,preview.w,preview.h,preview.tpl,preview.color); c.restore();
+    c.globalAlpha=0.35; c.setLineDash([4,6]); c.strokeStyle='#3a30e8'; c.lineWidth=2;
+    c.beginPath(); c.moveTo(preview.x,sy+preview.h/2); c.lineTo(preview.x,H); c.stroke();
+    c.setLineDash([]); c.globalAlpha=1;
+  }
+  c.restore();
+});
+function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+// CAD-plan drawing helpers (stroke=cream on colored tile)
+function _s(c,x,y,w,h,r){roundRect(c,x,y,Math.max(1,w),Math.max(1,h),Math.min(r||2,w/2,h/2));c.stroke();}
+function _sf(c,x,y,w,h,r){roundRect(c,x,y,Math.max(1,w),Math.max(1,h),Math.min(r||2,w/2,h/2));c.fill();c.stroke();}
+function _ci(c,x,y,r){c.beginPath();c.arc(x,y,Math.max(1,r),0,6.283);c.stroke();}
+function _ln(c,a,b,d,e){c.beginPath();c.moveTo(a,b);c.lineTo(d,e);c.stroke();}
+function _arc(c,x,y,r,s,e){c.beginPath();c.arc(x,y,r,s,e);c.stroke();}
+function sofaH(c,x,y,w,h,seats){ // arms L/R, back top, seat cushions
+  _sf(c,x,y,w,h,5);
+  const arm=Math.max(4,w*0.1);
+  _s(c,x+1,y+1,arm,h-2,3); _s(c,x+w-arm-1,y+1,arm,h-2,3);
+  _s(c,x+arm,y+1,w-2*arm,h*0.3,3);
+  const sw=(w-2*arm)/seats;
+  for(let i=0;i<seats;i++) _sf(c,x+arm+i*sw+1.5,y+h*0.34,sw-3,h*0.58,3);
+}
+function sofaV(c,x,y,w,h,seats){ // arms T/B, back left, seat cushions
+  _sf(c,x,y,w,h,5);
+  const arm=Math.max(4,h*0.1);
+  _s(c,x+1,y+1,w-2,arm,3); _s(c,x+1,y+h-arm-1,w-2,arm,3);
+  _s(c,x+1,y+arm,w*0.3,h-2*arm,3);
+  const sh=(h-2*arm)/seats;
+  for(let i=0;i<seats;i++) _sf(c,x+w*0.34,y+arm+i*sh+1.5,w*0.6,sh-3,3);
+}
+function chairsRow(c,x,y,w,gap,n,dir){ // dining chairs along a row
+  const cw=(w-(n-1)*gap)/n;
+  for(let i=0;i<n;i++){ const cx=x+i*(cw+gap); _sf(c,cx,y,cw,cw*0.9,2);
+    if(dir==='down') _ln(c,cx,y+cw*0.9,cx+cw,y+cw*0.9); else _ln(c,cx,y,cx+cw,y); }
+}
+function drawRoom(c,w,h,tpl,color){
+  const x=-w/2,y=-h/2;
+  roundRect(c,x,y,w,h,5); c.fillStyle=color; c.fill();
+  c.lineWidth=2.2; c.strokeStyle='#2019b0'; c.stroke();
+  c.save();
+  roundRect(c,x+2,y+2,w-4,h-4,4); c.clip();
+  c.strokeStyle='rgba(255,242,235,.92)'; c.fillStyle='rgba(255,242,235,.13)'; c.lineWidth=1.3; c.lineJoin='round';
+  const p=7, ix=x+p, iy=y+p, iw=w-2*p, ih=h-2*p, m=Math.min(iw,ih);
+  if(tpl==='living'){                       // two facing sofas + coffee table + pouf
+    sofaV(c,ix,iy,iw*0.2,ih,3);
+    sofaV(c,ix+iw*0.8,iy,iw*0.2,ih,3);
+    _sf(c,ix+iw*0.36,iy+ih*0.34,iw*0.28,ih*0.34,3);
+    _ci(c,ix+iw*0.5,iy+ih*0.1,m*0.06);
+  } else if(tpl==='dining'){                 // table + chairs all around
+    _sf(c,ix+iw*0.22,iy+ih*0.26,iw*0.56,ih*0.48,6);
+    chairsRow(c,ix+iw*0.24,iy,iw*0.52,iw*0.05,3,'up');
+    chairsRow(c,ix+iw*0.24,iy+ih*0.82,iw*0.52,iw*0.05,3,'down');
+    _sf(c,ix,iy+ih*0.4,iw*0.1,ih*0.2,2); _sf(c,ix+iw*0.9,iy+ih*0.4,iw*0.1,ih*0.2,2);
+  } else if(tpl==='bedroom'){                // bed + pillows + nightstands + bench + door
+    _sf(c,ix+iw*0.22,iy+ih*0.16,iw*0.56,ih*0.58,4);
+    _s(c,ix+iw*0.25,iy+ih*0.18,iw*0.24,ih*0.13,2); _s(c,ix+iw*0.51,iy+ih*0.18,iw*0.24,ih*0.13,2);
+    _sf(c,ix,iy+ih*0.14,iw*0.17,ih*0.18,2); _sf(c,ix+iw*0.83,iy+ih*0.14,iw*0.17,ih*0.18,2);
+    _sf(c,ix+iw*0.24,iy+ih*0.8,iw*0.52,ih*0.16,2);
+    _arc(c,ix,iy+ih,m*0.34,-Math.PI/2,0);
+  } else if(tpl==='kitchen'){                // L counters + island + sink + burners
+    _sf(c,ix,iy,iw,ih*0.18,2);
+    _sf(c,ix,iy,iw*0.18,ih,2);
+    _s(c,ix+iw*0.5,iy+ih*0.02,iw*0.2,ih*0.13,2);
+    _ci(c,ix+iw*0.09,iy+ih*0.42,3); _ci(c,ix+iw*0.09,iy+ih*0.64,3);
+    _sf(c,ix+iw*0.4,iy+ih*0.44,iw*0.46,ih*0.34,3);
+  } else if(tpl==='office'){                 // desk + chair + credenza + rug + armchair + door
+    _sf(c,ix+iw*0.34,iy+ih*0.16,iw*0.5,ih*0.2,2);
+    _sf(c,ix+iw*0.52,iy+ih*0.4,iw*0.16,ih*0.15,3); _ci(c,ix+iw*0.6,iy+ih*0.475,m*0.03);
+    _sf(c,ix+iw*0.86,iy+ih*0.16,iw*0.14,ih*0.5,2);
+    _ci(c,ix+iw*0.28,iy+ih*0.55,m*0.16);
+    sofaH(c,ix,iy+ih*0.28,iw*0.24,ih*0.26,1);
+    _arc(c,ix,iy+ih,m*0.3,-Math.PI/2,0);
+  } else {                                   // bath: shower + tub + sink + toilet
+    _sf(c,ix,iy,iw*0.4,ih*0.4,2); _ln(c,ix,iy,ix+iw*0.4,iy+ih*0.4); _ln(c,ix+iw*0.4,iy,ix,iy+ih*0.4);
+    _sf(c,ix,iy+ih*0.5,iw*0.5,ih*0.48,7); _s(c,ix+iw*0.05,iy+ih*0.55,iw*0.4,ih*0.38,6);
+    _sf(c,ix+iw*0.52,iy,iw*0.46,ih*0.2,2); _ci(c,ix+iw*0.63,iy+ih*0.1,2); _ci(c,ix+iw*0.86,iy+ih*0.1,2);
+    _sf(c,ix+iw*0.62,iy+ih*0.5,iw*0.22,ih*0.3,4); _ci(c,ix+iw*0.73,iy+ih*0.64,m*0.07);
+  }
+  c.restore();
+}
+
+// input
+function press(e){ if(e.type==='keydown'&&e.code!=='Space')return; if(e.cancelable)e.preventDefault();
+  if(over)return; if(actx&&actx.state==='suspended')actx.resume(); drop(); }
+window.addEventListener('pointerdown',press);
+window.addEventListener('keydown',press);
+document.getElementById('again').addEventListener('click',(e)=>{e.stopPropagation();reset();});
+
+// sound (WebAudio)
+let actx; try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
+function tone(f,d,type,g=0.06){ if(!actx)return; const o=actx.createOscillator(),ga=actx.createGain();
+  o.type=type||'sine'; o.frequency.value=f; ga.gain.value=g; o.connect(ga); ga.connect(actx.destination);
+  o.start(); ga.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+d); o.stop(actx.currentTime+d); }
+function beep(f,d,t){tone(f,d,t,0.05);}
+function ding(f){tone(f,0.16,'triangle',0.08); setTimeout(()=>tone(f*1.5,0.12,'sine',0.05),60);}
+function buzz(){tone(120,0.3,'sawtooth',0.08); setTimeout(()=>tone(80,0.4,'sawtooth',0.07),120);}
+
+Render.run(render);
+const runner=Runner.create(); Runner.run(runner,engine);
+reset();
+</script>
+</body>
+</html>
