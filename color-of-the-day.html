@@ -41,13 +41,13 @@
 
   .result{display:none}
   .result.show{display:block}
-  .swatch{border-radius:12px;padding:40px 30px;color:#fff;box-shadow:0 20px 60px rgba(0,0,0,.14);position:relative;overflow:hidden}
-  .swatch .date{font-size:11px;letter-spacing:.24em;text-transform:uppercase;opacity:.85}
-  .swatch .hex{font-family:var(--serif);font-weight:600;font-size:clamp(44px,11vw,96px);line-height:1;margin:8px 0 4px;text-transform:uppercase}
-  .swatch .meta{font-size:13px;opacity:.9}
-  .palette{display:flex;height:44px;border-radius:8px;overflow:hidden;margin-top:18px;border:1px solid var(--line)}
+  .colorblock{border-radius:14px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.16)}
+  .swatch{min-height:min(56vh,440px);padding:26px 28px;color:#fff;position:relative;display:flex;flex-direction:column;justify-content:flex-end}
+  .swatch .date{font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:.8}
+  .swatch .hex{font-family:var(--serif);font-weight:600;font-size:clamp(26px,5vw,44px);line-height:1;margin:6px 0 3px;text-transform:uppercase}
+  .swatch .meta{font-size:10.5px;letter-spacing:.02em;opacity:.85}
+  .palette{display:flex;height:58px}
   .palette span{flex:1}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:18px}
   .thumb{aspect-ratio:1;border-radius:6px;overflow:hidden;border:1px solid var(--line);position:relative}
   .thumb img{width:100%;height:100%;object-fit:cover;display:block}
   .thumb i{position:absolute;left:0;right:0;bottom:0;height:6px}
@@ -68,19 +68,15 @@
       <p class="sub">The most-used dominant color across the photos uploaded to Unsplash today.</p>
     </header>
 
-    <div style="text-align:center">
-      <div class="status" id="status">Reading today’s uploads…</div>
-      <button class="btn ghost" id="go" style="margin-top:14px">Refresh</button>
-    </div>
-
     <div class="result" id="result">
-      <div class="swatch" id="swatch">
-        <div class="date" id="rdate"></div>
-        <div class="hex" id="rhex">#000000</div>
-        <div class="meta" id="rmeta"></div>
+      <div class="colorblock">
+        <div class="swatch" id="swatch">
+          <div class="date" id="rdate"></div>
+          <div class="hex" id="rhex">#000000</div>
+          <div class="meta" id="rmeta"></div>
+        </div>
+        <div class="palette" id="palette"></div>
       </div>
-      <div class="palette" id="palette"></div>
-      <div class="grid" id="grid"></div>
     </div>
 
     <p class="foot" id="foot"></p>
@@ -91,21 +87,23 @@ const API='https://api.unsplash.com';
 const $=id=>document.getElementById(id);
 const KEY='SWAojVJs9NvDXZZhKmV2oH_pZW74Yag84NN7Z5h3Et0'; // Unsplash Access Key — public client-side ID by design
 
-$('go').onclick=()=>run(true);
+const goBtn=$('go');
+if(goBtn) goBtn.onclick=()=>run(true);
+function busy(b){ if(goBtn) goBtn.disabled=b; }
 async function run(force){
-  $('go').disabled=true;
+  busy(true);
   const today=new Date().toISOString().slice(0,10);
   const cache=JSON.parse(localStorage.getItem('cotd_'+today)||'null');
-  if(cache && !force){ render(cache); setStatus('Today’s color · cached'); $('go').disabled=false; return; }
+  if(cache && !force){ render(cache); setStatus('Today’s color · cached'); busy(false); return; }
 
   const colors=[], samples=[]; let page=1, scanned=0, stop=false;
   try{
     while(page<=6 && !stop){
       setStatus(`Scanning Unsplash… page ${page} (${scanned} photos)`);
       const r=await fetch(`${API}/photos?order_by=latest&per_page=30&page=${page}`,{headers:{'Authorization':'Client-ID '+KEY,'Accept-Version':'v1'}});
-      if(r.status===401){ setStatus('That key was rejected (401). Double-check your Access Key.',true); $('go').disabled=false; return; }
-      if(r.status===403){ setStatus('Rate limit reached (403). Demo keys allow 50 requests/hour — try again later.',true); $('go').disabled=false; return; }
-      if(!r.ok){ setStatus('Unsplash error '+r.status+'.',true); $('go').disabled=false; return; }
+      if(r.status===401){ setStatus('That key was rejected (401). Double-check your Access Key.',true); busy(false); return; }
+      if(r.status===403){ setStatus('Rate limit reached (403). Demo keys allow 50 requests/hour — try again later.',true); busy(false); return; }
+      if(!r.ok){ setStatus('Unsplash error '+r.status+'.',true); busy(false); return; }
       const data=await r.json();
       if(!data.length) break;
       for(const p of data){
@@ -118,7 +116,7 @@ async function run(force){
       }
       page++;
     }
-  }catch(e){ setStatus('Network error: '+e.message,true); $('go').disabled=false; return; }
+  }catch(e){ setStatus('Network error: '+e.message,true); busy(false); return; }
 
   let usedFallback=false;
   if(colors.length<5){
@@ -131,13 +129,13 @@ async function run(force){
     for(const p of data){ if(p.color){ colors.push(p.color); if(samples.length<24) samples.push({c:p.color,thumb:p.urls&&p.urls.thumb,link:(p.links&&p.links.html)||'#',who:(p.user&&p.user.name)||''}); } }
   }
 
-  if(!colors.length){ setStatus('No colors found. Try again in a bit.',true); $('go').disabled=false; return; }
+  if(!colors.length){ setStatus('No colors found. Try again in a bit.',true); busy(false); return; }
 
   const res=aggregate(colors, today, usedFallback, samples);
   localStorage.setItem('cotd_'+today, JSON.stringify(res));
   render(res);
   setStatus(`Done — analyzed ${colors.length} photos.`);
-  $('go').disabled=false;
+  busy(false);
 }
 
 function aggregate(hexes, date, fallback, samples){
@@ -167,11 +165,10 @@ function render(res){
   $('rhex').textContent=res.winner;
   $('rmeta').textContent=`${res.pct}% of ${res.count} photos landed in this color family · overall average ${res.avg}`;
   $('palette').innerHTML=res.palette.map(c=>`<span style="background:${c}" title="${c}"></span>`).join('');
-  $('grid').innerHTML=res.samples.map(s=>`<a class="thumb" href="${s.link}" target="_blank" rel="noopener" title="${s.c} — ${s.who}">${s.thumb?`<img src="${s.thumb}" alt="">`:''}<i style="background:${s.c}"></i></a>`).join('');
   $('foot').innerHTML='Photos & colors via the <a href="https://unsplash.com/developers" target="_blank" rel="noopener">Unsplash API</a>. Sampled from the latest uploads (not the entire day’s catalog).';
 }
 
-function setStatus(t,err){ const s=$('status'); s.textContent=t; s.className='status'+(err?' err':''); }
+function setStatus(t,err){ const s=$('status'); if(!s)return; s.textContent=t; s.className='status'+(err?' err':''); }
 function h2r(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
 function r2h(r,g,b){return '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,v)).toString(16).padStart(2,'0')).join('');}
 function q(v){return Math.round(v/48)*48;} // ~6 levels per channel

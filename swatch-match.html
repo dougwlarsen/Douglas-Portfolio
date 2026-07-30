@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Guess Hue — Douglas Larsen</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#fff2eb;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;--line:rgba(16,16,24,.14);
+    --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);overflow:hidden;-webkit-user-select:none;user-select:none;touch-action:manipulation;
+    display:flex;flex-direction:column;align-items:center;justify-content:center}
+  a{color:inherit;text-decoration:none}
+  .top{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 22px;z-index:5}
+  .brand{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:700}
+  .brand b{color:var(--blue)}
+  .back{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);border:1px solid var(--line);border-radius:40px;padding:8px 16px}
+  .back:hover{border-color:var(--blue);color:var(--blue)}
+
+  .game{width:min(92vw,440px);display:flex;flex-direction:column;gap:16px}
+  .hud{display:flex;align-items:flex-end;justify-content:space-between}
+  .score{font-family:var(--serif);font-size:46px;font-weight:600;line-height:.85;color:var(--blue)}
+  .score small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:3px}
+  .lives{font-size:18px;letter-spacing:2px;color:var(--blue)}
+  .lives .off{opacity:.2}
+  .best{text-align:right;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+
+  .prompt{display:flex;align-items:center;gap:16px}
+  .target{width:96px;height:96px;border-radius:12px;flex:none;box-shadow:0 12px 34px rgba(0,0,0,.14);border:1px solid rgba(0,0,0,.06)}
+  .prompt .t{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.05}
+  .prompt .t small{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px}
+  .timer{height:8px;border-radius:8px;background:rgba(58,48,232,.12);overflow:hidden}
+  .timer i{display:block;height:100%;width:100%;background:var(--blue);transform-origin:left;border-radius:8px}
+
+  .grid{display:grid;gap:10px}
+  .tile{aspect-ratio:1;border-radius:12px;cursor:pointer;border:2px solid transparent;transition:transform .08s, box-shadow .15s;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+  .tile:active{transform:scale(.96)}
+  .tile.correct{border-color:#0f8a3c;box-shadow:0 0 0 4px rgba(15,138,60,.25)}
+  .tile.wrong{border-color:#c0271b;box-shadow:0 0 0 4px rgba(192,39,27,.22)}
+
+  .over{position:fixed;inset:0;background:rgba(255,242,235,.94);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;z-index:10}
+  .over.show{display:flex}
+  .over h1{font-family:var(--serif);font-size:clamp(40px,8vw,60px);font-weight:600;text-transform:uppercase;line-height:1}
+  .over .big{font-family:var(--serif);font-size:clamp(64px,12vw,92px);color:var(--blue);line-height:1;margin:6px 0}
+  .over p{color:var(--ink-soft);font-size:14px}
+  .btn{margin-top:20px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 32px;border:1px solid var(--blue);color:#fff;background:var(--blue);border-radius:40px;cursor:pointer}
+  .btn:hover{background:var(--blue-deep)}
+  .btn.ghost{background:none;color:var(--blue);margin-left:8px}
+  .btn.ghost:hover{background:var(--blue);color:#fff}
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="brand">Douglas <b>Larsen</b> · Guess Hue</div>
+    <a class="back" href="index.html">← Back to site</a>
+  </div>
+
+  <div class="game">
+    <div class="hud">
+      <div class="score"><span id="score">0</span><small>Score</small></div>
+      <div class="lives" id="lives"></div>
+      <div class="best">Best<br><span id="best">0</span></div>
+    </div>
+    <div class="prompt">
+      <div class="target" id="target"></div>
+      <div class="t">Find the match<small id="lvl">Level 1</small></div>
+    </div>
+    <div class="timer"><i id="bar"></i></div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="over" id="over">
+    <h1>Out of Guesses</h1>
+    <div class="big" id="final">0</div>
+    <p id="msg"></p>
+    <div>
+      <button class="btn" id="again">Play Again</button>
+      <a class="btn ghost" href="index.html">Exit</a>
+    </div>
+  </div>
+
+<script>
+const $=id=>document.getElementById(id);
+let level, score, lives, combo, best, target, roundTime, tStart, raf, locked, over;
+best=Number(localStorage.getItem('sm_best')||0); $('best').textContent=best;
+
+function gridN(l){ return l<3?4 : l<5?6 : l<8?9 : l<12?12 : 16; }
+function cols(n){ return n<=4?2 : n<=6?3 : n<=9?3 : n<=12?4 : 4; }
+function roundMs(l){ return Math.max(1500, 3600 - l*150); }
+function delta(l){ return {h:Math.max(6,28-l*1.7), s:Math.max(5,16-l*0.9), li:Math.max(4,13-l*0.7)}; }
+
+function reset(){
+  level=1; score=0; lives=3; combo=0; over=false;
+  $('score').textContent='0'; $('over').classList.remove('show');
+  renderLives(); nextRound();
+}
+function renderLives(){ let s=''; for(let i=0;i<3;i++) s+=`<span class="${i<lives?'':'off'}">●</span>`; $('lives').innerHTML=s; }
+
+function nextRound(){
+  locked=false;
+  const n=gridN(level), d=delta(level);
+  const h=Math.random()*360, s=48+Math.random()*24, li=42+Math.random()*20;
+  target={h,s,li};
+  $('target').style.background=hsl(h,s,li);
+  $('lvl').textContent='Level '+level;
+  const win=(Math.random()*n)|0;
+  const grid=$('grid'); grid.style.gridTemplateColumns=`repeat(${cols(n)},1fr)`;
+  grid.innerHTML='';
+  for(let i=0;i<n;i++){
+    const tile=document.createElement('div'); tile.className='tile';
+    if(i===win){ tile.style.background=hsl(h,s,li); tile.dataset.win='1'; }
+    else{
+      // distractor: shift by at least a noticeable amount, up to delta
+      const sh=(base,amt,min)=>{const dir=Math.random()<0.5?-1:1; return base+dir*(min+Math.random()*(amt-min));};
+      let hh=sh(h,d.h,d.h*0.45), ss=clamp(sh(s,d.s,d.s*0.45),20,90), ll=clamp(sh(li,d.li,d.li*0.45),22,82);
+      tile.style.background=hsl(hh,ss,ll);
+    }
+    tile.onclick=()=>pick(tile);
+    grid.appendChild(tile);
+  }
+  startTimer();
+}
+function startTimer(){
+  roundTime=roundMs(level); tStart=performance.now();
+  cancelAnimationFrame(raf);
+  const bar=$('bar');
+  (function tick(now){
+    const e=performance.now()-tStart, f=Math.max(0,1-e/roundTime);
+    bar.style.transform='scaleX('+f+')';
+    bar.style.background = f<0.28 ? '#c0271b' : 'var(--blue)';
+    if(e>=roundTime && !locked){ timeout(); return; }
+    if(!locked) raf=requestAnimationFrame(tick);
+  })();
+}
+function pick(tile){
+  if(locked||over) return; locked=true; cancelAnimationFrame(raf);
+  if(actx&&actx.state==='suspended')actx.resume();
+  if(tile.dataset.win){
+    const remain=Math.max(0,1-(performance.now()-tStart)/roundTime);
+    const bonus=Math.round(remain*20);
+    score+= 10 + combo*2 + bonus; combo++; level++;
+    $('score').textContent=score; tile.classList.add('correct'); ding(300+Math.min(combo,12)*24);
+    setTimeout(nextRound,340);
+  } else {
+    loseLife(tile);
+  }
+}
+function timeout(){ locked=true; cancelAnimationFrame(raf); loseLife(null); }
+function loseLife(wrongTile){
+  lives--; combo=0; renderLives(); buzz();
+  if(wrongTile) wrongTile.classList.add('wrong');
+  const w=document.querySelector('.tile[data-win]'); if(w) w.classList.add('correct');
+  if(lives<=0){ setTimeout(gameOver,520); }
+  else setTimeout(nextRound,620);
+}
+function gameOver(){
+  over=true;
+  if(score>best){best=score;localStorage.setItem('sm_best',best);}
+  $('best').textContent=best; $('final').textContent=score;
+  $('msg').textContent=`You reached level ${level} · best ${best}`;
+  $('over').classList.add('show');
+}
+$('again').onclick=(e)=>{e.stopPropagation();reset();};
+
+// helpers
+function hsl(h,s,l){return `hsl(${h.toFixed(1)},${s.toFixed(1)}%,${l.toFixed(1)}%)`;}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+// sound
+let actx; try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
+function tone(f,d,t,g){ if(!actx)return; const o=actx.createOscillator(),ga=actx.createGain();
+  o.type=t||'sine';o.frequency.value=f;ga.gain.value=g||0.05;o.connect(ga);ga.connect(actx.destination);
+  o.start();ga.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+d);o.stop(actx.currentTime+d);}
+function ding(f){tone(f,0.14,'triangle',0.07); setTimeout(()=>tone(f*1.5,0.1,'sine',0.05),55);}
+function buzz(){tone(150,0.22,'sawtooth',0.07); setTimeout(()=>tone(95,0.3,'sawtooth',0.06),90);}
+
+reset();
+</script>
+</body>
+</html>
