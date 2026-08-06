@@ -86,6 +86,9 @@
   .arrow{font-size:24px;color:var(--blue);transition:transform .35s}
   .row:hover .arrow{transform:translate(4px,-4px)}
   .count{font-size:11px;letter-spacing:.14em;color:var(--ink-soft);margin-top:12px}
+  .more-work{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:28px;padding:22px 0 4px;font-family:var(--serif);text-transform:uppercase;font-size:clamp(19px,3vw,30px);font-weight:500;color:var(--ink-soft);transition:color .3s,padding-left .3s}
+  .more-work:hover{color:var(--blue);padding-left:14px}
+  .more-work .ar{color:var(--blue);font-family:var(--sans);font-size:.8em}
 
   /* Blue inverted section */
   .invert{background:var(--blue);color:#fff;padding:170px 0;position:relative;overflow:hidden}
@@ -238,6 +241,7 @@
   <div class="wrap">
     <div class="sec-top reveal"><h2>Selected Work</h2><span class="ey idx">02 — Portfolio</span></div>
     <div id="projList"></div>
+    <a class="more-work reveal" href="additional.html">Additional design work <span class="ar">↗</span></a>
   </div>
 </section>
 
@@ -350,12 +354,8 @@
      desc:"Layered interiors with a soft, collected palette and custom detailing. Lucas."},
     {slug:"beach",tag:"Residential",name:"Beach Ryōsha",n:7,
      desc:"An oceanfront residence blending Japanese ryōkan calm with modern beach living. Lucas."},
-    {slug:"clifton",tag:"Residential",name:"Clifton Road",n:7,
-     desc:"A light-filled family home with warm materials and clean, confident lines. Lucas."},
     {slug:"vineyard",tag:"Residential",name:"Vineyard Villa",n:7,
      desc:"A relaxed villa set among the vines — natural textures and easy indoor-outdoor flow. Lucas."},
-    {slug:"cove",tag:"Residential",name:"Cove House",n:7,
-     desc:"A serene waterfront home with a soft, collected palette and quiet detailing. Lucas."},
     {slug:"viacom",tag:"Workplace",name:"Viacom HQ",n:7,
      desc:"Headquarters interiors for an international media company overlooking the Manhattan skyline."},
     {slug:"penguin",tag:"Workplace",name:"Penguin Random House",n:7,

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Additional Design Work — Douglas Larsen</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#080b26; --navy2:#0c1030; --panel:#10163f;
+    --orange:#ff7a1a; --yellow:#ffd23f; --white:#f3f2ea; --dim:#9aa0c0;
+    --mono:'Space Mono',monospace; --black:'Archivo Black',sans-serif; --anton:'Anton',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--navy);color:var(--white);font-family:var(--mono);line-height:1.5;overflow-x:hidden;
+    background-image:radial-gradient(1000px 700px at 80% -5%,rgba(255,122,26,.10),transparent 60%),radial-gradient(900px 700px at -5% 40%,rgba(255,210,63,.06),transparent 60%)}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:80;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 26px}
+
+  nav{display:flex;justify-content:space-between;align-items:center;padding:18px 26px;position:sticky;top:0;z-index:60;
+    background:linear-gradient(var(--navy),rgba(8,11,38,.4));backdrop-filter:blur(3px)}
+  .back{font-family:var(--mono);font-size:12px;color:var(--yellow);border:1px solid rgba(255,210,63,.4);padding:8px 14px;border-radius:2px;transform:rotate(-1deg)}
+  .back:hover{background:var(--yellow);color:var(--navy)}
+  .tag{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em}
+
+  /* hero */
+  .hero{padding:70px 0 30px;position:relative}
+  .psst{font-family:var(--black);color:var(--orange);font-size:13px;letter-spacing:.3em;text-transform:uppercase;transform:rotate(-2deg);display:inline-block}
+  .hero h1{font-family:var(--anton);text-transform:uppercase;line-height:.86;letter-spacing:.01em;margin:10px 0 0;
+    font-size:clamp(52px,13vw,168px)}
+  .hero h1 .b{color:var(--yellow)} .hero h1 .o{color:var(--orange)}
+  .hero h1 .tilt{display:inline-block;transform:rotate(-3deg)}
+  .note{font-family:var(--mono);max-width:540px;margin-top:26px;color:var(--white);font-size:14px;border-left:3px solid var(--orange);padding-left:16px;transform:rotate(.4deg)}
+  .note b{color:var(--yellow)}
+  .ghostword{position:absolute;font-family:var(--anton);text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,210,63,.10);z-index:0;pointer-events:none;line-height:.8}
+
+  /* category */
+  .cat{padding:64px 0 20px;position:relative}
+  .cathead{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+  .cathead .num{font-family:var(--anton);font-size:clamp(70px,15vw,190px);line-height:.8;color:transparent;-webkit-text-stroke:2px var(--orange);transform:rotate(-4deg)}
+  .cathead .ttl{font-family:var(--anton);text-transform:uppercase;font-size:clamp(38px,8vw,104px);line-height:.86;color:var(--white);margin-top:10px}
+  .cathead .ttl em{font-style:normal;color:var(--yellow)}
+  .quote{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,2.4vw,26px);color:var(--white);max-width:640px;margin:4px 0 2px;transform:rotate(-.6deg)}
+  .skills{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.04em;margin-bottom:26px}
+
+  /* messy pile */
+  .pile{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:30px 12px;padding:22px 0 10px}
+  .bit{position:relative;flex:none}
+  .bit:hover{z-index:20}
+  .bit.ov{margin-left:-34px;margin-top:26px}
+  @media(max-width:720px){.bit.ov{margin-left:0;margin-top:0}}
+  .bit img{width:100%;height:auto;box-shadow:0 14px 40px rgba(0,0,0,.5);background:#0c1030}
+  .bit .cap{font-family:var(--mono);font-size:10.5px;color:var(--yellow);margin-top:7px;letter-spacing:.02em;transform:rotate(-.8deg)}
+  .bit.frame img{border:5px solid var(--white)}
+  .bit.tape::before{content:"";position:absolute;top:-11px;left:22px;width:64px;height:22px;background:rgba(255,210,63,.55);transform:rotate(-8deg);z-index:3;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+  .bit.tape2::after{content:"";position:absolute;bottom:16px;right:-8px;width:54px;height:20px;background:rgba(255,122,26,.5);transform:rotate(10deg);z-index:3}
+  /* text-only project cards */
+  .card{flex:none;padding:18px 20px;border:2px solid rgba(255,255,255,.18);background:var(--panel);position:relative;z-index:4}
+  .card .n{font-family:var(--black);text-transform:uppercase;font-size:clamp(20px,3vw,32px);line-height:.95;color:var(--white)}
+  .card .n .hl{color:var(--orange)}
+  .card .s{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:8px}
+  .card::before{content:"✦";position:absolute;top:-12px;right:-10px;color:var(--yellow);font-size:22px}
+  /* pinboard bits */
+  .bit.pin::after,.bit.pin2::after{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;z-index:6;
+    background:radial-gradient(circle at 34% 30%,#ffb36b,#e0560d 62%,#8f3603);box-shadow:0 4px 7px rgba(0,0,0,.55),inset -1px -1px 2px rgba(0,0,0,.35)}
+  .bit.pin2::after{background:radial-gradient(circle at 34% 30%,#ffe9a3,#f0b400 60%,#a97e00)}
+  .swatchcard{background:#f4f1e8;padding:9px 9px 11px;box-shadow:0 16px 36px rgba(0,0,0,.5);border:1px solid rgba(0,0,0,.12)}
+  .swatchcard .sw{height:34px;border-radius:2px;margin-bottom:5px;position:relative}
+  .swatchcard .sw:last-child{margin-bottom:0}
+  .swatchcard .sw span{position:absolute;left:6px;bottom:3px;font-family:var(--mono);font-size:8px;color:rgba(0,0,0,.62);letter-spacing:.02em}
+  .cat::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.6;
+    background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:46px 46px}
+  .cat .wrap{position:relative;z-index:1}
+
+  footer{padding:70px 0 50px;text-align:center;position:relative}
+  footer .big{font-family:var(--anton);text-transform:uppercase;font-size:clamp(30px,6vw,72px);line-height:.9;color:var(--orange);transform:rotate(-1.5deg)}
+  footer .big a{color:var(--yellow)}
+  footer .sub{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:18px}
+
+  @media(max-width:720px){
+    .bit{max-width:82vw}
+    .cathead .num{font-size:78px}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav>
+  <span class="tag">DL // back room · graphic + industrial</span>
+  <a class="back" href="index.html">back</a>
+</nav>
+
+<header class="hero wrap">
+  <span class="ghostword" style="top:-10px;right:-20px;font-size:26vw">EXTRAS</span>
+  <span class="psst">Psst — you found it</span>
+  <h1><span class="tilt">Additional</span><br><span class="o">Design</span> <span class="b">Work</span></h1>
+  <p class="note">designing across disciplines makes the work better — <b>interiors, graphics, and industrial design</b> each sharpen the others, so every project gains more tools, more perspective, and stronger solutions. logos, product, packaging, campaigns, a couple NFTs, and a shoot with a quarterback. dig around.</p>
+</header>
+
+<main id="piles"></main>
+
+<footer class="wrap">
+  <div class="big"><a href="index.html"><span style="color:#c9560c">back</span> to interiors →</a></div>
+  <div class="sub">Douglas Larsen · graphic &amp; industrial design · 2012–2026</div>
+</footer>
+
+<script>
+const cats=[
+  {num:"01", ttl:["Branding"],
+   quote:"I tend to focus on the needs of clients and the facts of what their audience will best respond to — sometimes with trends, but always with classically good design.",
+   skills:"Photoshop 15y · Illustrator 15y · InDesign 15y · After Effects 7y · identity + logo",
+   bits:[
+    {txt:1,name:["Butter ","Leaf"],sub:"Local bakery identity · 2022",w:300,r:-3,cls:"pin"},
+    {sw:[["#e5e3d9","Cool Cream"],["#0d4238","NW Spruce"],["#a6803b","Optimistic Gold"],["#fac23b","Fresh Butter"]],w:150,r:5,cls:"tape"},
+    {img:"takeheart_4.jpg",cap:"Take Heart · logo A",w:410,r:2,cls:"tape"},
+    {img:"walnut_9.jpg",cap:"Walnut · cap",w:200,r:-5,cls:"pin"},
+    {img:"takeheart_6.jpg",cap:"Take Heart · logo C",w:150,r:-7,cls:"ov"},
+    {img:"walnut_2.jpg",cap:"Walnut · nitro pour",w:330,r:3,cls:"tape2"},
+    {img:"takeheart_7.jpg",cap:"Take Heart · logo D",w:270,r:3},
+    {txt:1,name:["Holy ","Smokes"],sub:"Wedding + art-film studio · 2022",w:280,r:2,cls:"pin2"},
+    {txt:1,name:["smoke ","signals"],sub:"where the sacred meets the smoke",w:170,r:-4},
+    {img:"takeheart_5.jpg",cap:"Take Heart · logo B",w:310,r:3,cls:"ov"},
+    {img:"walnut_10.png",cap:"Walnut · Tagetcha mascot",w:230,r:-4,cls:"pin"},
+    {img:"takeheart_3.jpg",cap:"Take Heart · color starts",w:230,r:-3},
+    {img:"abyss_5.jpg",cap:"ABYSS · logo",w:250,r:-2,cls:"tape2"},
+    {txt:1,name:["BFF ","OBJ"],sub:"Hand-blown glassware, funky vibe · 2022",w:300,r:-4,cls:"pin"},
+    {sw:[["#402ee5",""],["#f0e026",""],["#f03d3d",""],["#03332e",""],["#c2ccf2",""]],w:126,r:6,cls:"tape"},
+    {txt:1,name:["drink","ware"],sub:"top glass · liquid gold · ride the ripple",w:180,r:5},
+    {img:"vinta_4.jpg",cap:"Vinta · logo",w:240,r:3,cls:"frame"},
+    {img:"vinta_7.jpg",cap:"Vinta × RS-1 · logo lockups",w:340,r:-2,cls:"tape"},
+    {img:"walnut_3.png",cap:"Walnut Nitro Coffee · logo",w:300,r:-3,cls:"pin2"},
+    {img:"walnut_8.png",cap:"Walnut · mark",w:180,r:4,cls:"ov"},
+    {img:"takeheart_1.jpg",cap:"Take Heart · brief",w:240,r:-2},
+   ]},
+  {num:"02", ttl:["Industrial","Design"],
+   quote:"Good product design earns its shape from how people actually use it — then makes that shape feel inevitable.",
+   skills:"Fusion 360 · Keyshot · SketchUp · packaging + tech-pack · prototyping",
+   bits:[
+    {img:"rs1_1.jpg",cap:"RS-1 · product overview",w:270,r:-3,cls:"pin"},
+    {img:"vinta_2.jpg",cap:"Vinta · backpack (olive)",w:230,r:3,cls:"tape"},
+    {img:"c1n_1.jpg",cap:"Vinta × C1N · belt / wallet bag",w:380,r:2,cls:"pin2"},
+    {img:"vinta_3.jpg",cap:"Vinta · backpack (berry)",w:190,r:-5,cls:"ov"},
+    {img:"rs1_6.jpg",cap:"RS-1 · worn",w:220,r:3,cls:"frame"},
+    {img:"c1n_2.jpg",cap:"Vinta × C1N · bag tech pack",w:260,r:-2,cls:"tape2"},
+    {img:"rs1_2.jpg",cap:"RS-1 · size + packaging system",w:330,r:3},
+    {img:"rs1_5.jpg",cap:"RS-1 · AIR (Japan intro)",w:230,r:-3,cls:"ov"},
+    {img:"rs1_4.png",cap:"RS-1 · ActiveShield parts guide",w:250,r:-2,cls:"pin"},
+   ]},
+  {num:"03", ttl:["Marketing","Graphics"],
+   quote:"Seeking nuance over novelty — making sure the story has substance, and more than just a fresh take.",
+   skills:"Storytelling 15y · Social 8y · human-behavior study 8y · color theory 20y",
+   bits:[
+    {img:"gm_1.jpg",cap:"Graft Milk · filament",w:210,r:-3,cls:"pin"},
+    {img:"gm_2.jpg",cap:"Graft Milk · face-shield callout",w:210,r:3,cls:"tape"},
+    {img:"gm_3.jpg",cap:"Graft Milk · shields in use",w:320,r:-2},
+    {img:"gm_6.jpg",cap:"Graft Milk · product shoot",w:230,r:4,cls:"ov"},
+    {img:"gm_4.jpg",cap:"Graft Milk · face-shield ad",w:180,r:4,cls:"pin2"},
+    {img:"gm_5.png",cap:"Graft Milk · clip study",w:260,r:-3},
+    {img:"walnut_4.jpg",cap:"Walnut · merch / street",w:190,r:3,cls:"tape2"},
+    {img:"walnut_6.jpg",cap:"Walnut · merch (back)",w:200,r:-3,cls:"ov"},
+    {img:"vinta_6.jpg",cap:"Vinta · design process",w:350,r:2,cls:"pin"},
+    {img:"rs1_3.jpg",cap:"RS-1 · Japan campaign",w:280,r:-2,cls:"frame"},
+    {txt:1,name:["LIT"],sub:"Pitch decks · site · legal docs · 2020",w:200,r:5,cls:"pin"},
+   ]},
+  {num:"04", ttl:["Art","Direction"],
+   quote:"People are always the point. We work with people, for people, alongside people — the best work comes through relationship.",
+   skills:"Leadership 7y · photography 20y · mood-boarding 15y · style direction 7y",
+   bits:[
+    {img:"cam_3.jpg",cap:"Cam Newton × Vinta · shoot",w:300,r:-2,cls:"pin"},
+    {img:"cam_2.jpg",cap:"Cam Newton × Vinta · shoot",w:200,r:4,cls:"frame"},
+    {img:"cam_4.jpg",cap:"Cam Newton × Vinta · shoot",w:210,r:-4,cls:"ov"},
+    {img:"cam_5.jpg",cap:"Cam Newton × Vinta · shoot",w:230,r:3,cls:"tape"},
+    {img:"cam_1.jpg",cap:"Vinta · backpack lookbook",w:180,r:-3,cls:"pin2"},
+    {txt:1,name:["Chase"],sub:"Home-loan social campaign · 2018",w:220,r:3,cls:"pin"},
+    {img:"abyss_1.jpg",cap:"ABYSS · cube over the city",w:370,r:-3,cls:"tape2"},
+    {img:"abyss_2.jpg",cap:"ABYSS · starship",w:240,r:2},
+    {img:"abyss_6.jpg",cap:"ABYSS · black hole",w:300,r:-2,cls:"ov"},
+    {img:"abyss_3.jpg",cap:"ABYSS · character render",w:210,r:-2,cls:"pin"},
+    {img:"abyss_8.jpg",cap:"ABYSS · orbit",w:260,r:3},
+    {img:"abyss_4.jpg",cap:"ABYSS · key art",w:250,r:3,cls:"tape"},
+   ]},
+];
+const piles=document.getElementById('piles');
+cats.forEach(cat=>{
+  const sec=document.createElement('section'); sec.className='cat';
+  const w=document.createElement('div'); w.className='wrap';
+  w.innerHTML=`<div class="cathead"><span class="num">${cat.num}</span>
+    <span class="ttl">${cat.ttl[0]}${cat.ttl[1]?'<br><em>'+cat.ttl[1]+'</em>':''}</span></div>
+    <div class="quote">“${cat.quote}”</div>
+    <div class="skills">${cat.skills}</div>`;
+  const pile=document.createElement('div'); pile.className='pile';
+  cat.bits.forEach(b=>{
+    const el=document.createElement('div');
+    el.className='bit'+(b.cls?' '+b.cls:'');
+    el.style.width=b.w+'px';
+    el.style.transform='rotate('+b.r+'deg)';
+    if(b.sw){
+      el.classList.add('swatchcard');
+      el.innerHTML=b.sw.map(c=>`<div class="sw" style="background:${c[0]}">${c[1]?'<span>'+c[1]+'</span>':''}</div>`).join('');
+    } else if(b.txt){
+      el.classList.add('card');
+      el.innerHTML=`<div class="n">${b.name.map((s,i)=>i%2?'<span class="hl">'+s+'</span>':s).join('')}</div><div class="s">${b.sub}</div>`;
+    } else {
+      el.innerHTML=`<img src="assets/extras/${b.img}" alt="" loading="lazy"><div class="cap">${b.cap}</div>`;
+    }
+    pile.appendChild(el);
+  });
+  w.appendChild(pile); sec.appendChild(w); piles.appendChild(sec);
+});
+</script>
+</body>
+</html>
