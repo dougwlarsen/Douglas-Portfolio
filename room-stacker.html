@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#FFFFEB;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
+  :root{--paper:#fff2eb;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
     --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -28,7 +28,7 @@
   .score small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px}
   .best{text-align:right;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
   .hint{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);pointer-events:none;transition:opacity .4s}
-  .over{position:absolute;inset:0;background:rgba(255,255,235,.92);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+  .over{position:absolute;inset:0;background:rgba(255,242,235,.92);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
   .over.show{display:flex}
   .over h1{font-family:var(--serif);font-size:52px;font-weight:600;line-height:1;text-transform:uppercase}
   .over p{margin-top:14px;color:var(--ink-soft);font-size:15px}
@@ -92,7 +92,7 @@ const engine=Engine.create();
 engine.gravity.y=1.1;
 const render=Render.create({canvas,engine,options:{width:W,height:H,
   pixelRatio:Math.min(window.devicePixelRatio||1,2),
-  wireframes:false,background:'#FFFFEB',hasBounds:true}});
+  wireframes:false,background:'#fff2eb',hasBounds:true}});
 render.bounds.min={x:0,y:0}; render.bounds.max={x:W,y:H};
 const ctx=render.context;
 
@@ -233,7 +233,7 @@ function drawRoom(c,w,h,tpl,color){
   c.lineWidth=2.2; c.strokeStyle='#2019b0'; c.stroke();
   c.save();
   roundRect(c,x+2,y+2,w-4,h-4,4); c.clip();
-  c.strokeStyle='rgba(255,255,235,.92)'; c.fillStyle='rgba(255,255,235,.13)'; c.lineWidth=1.3; c.lineJoin='round';
+  c.strokeStyle='rgba(255,242,235,.92)'; c.fillStyle='rgba(255,242,235,.13)'; c.lineWidth=1.3; c.lineJoin='round';
   const p=7, ix=x+p, iy=y+p, iw=w-2*p, ih=h-2*p, m=Math.min(iw,ih);
   if(tpl==='living'){                       // two facing sofas + coffee table + pouf
     sofaV(c,ix,iy,iw*0.2,ih,3);

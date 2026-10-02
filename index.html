@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FFFFEB; --blue:#3a30e8; --blue-deep:#2019b0;
+    --paper:#fff2eb; --blue:#3a30e8; --blue-deep:#2019b0;
     --ink:#101018; --ink-soft:#6a6a78; --line:rgba(16,16,24,.14);
     --serif:'Cormorant',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
   }
@@ -30,7 +30,7 @@
 
   /* Nav */
   nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-    padding:18px 40px;background:rgba(255,255,235,.97);border-bottom:1px solid var(--line);transition:.3s}
+    padding:18px 40px;background:rgba(255,242,235,.97);border-bottom:1px solid var(--line);transition:.3s}
   nav .brand{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:700}
   nav .brand b{color:var(--blue)}
   .nav-links{display:flex;gap:30px}
@@ -191,11 +191,6 @@
 
   .lb-thumbs{flex-wrap:nowrap;justify-content:flex-start;max-height:90px}
   .lb-thumbs img{flex-shrink:0}
-  .invert,.contact{background:var(--paper);color:var(--ink)}
-  .invert .kicker,.contact .kicker,.invert h2 em{color:var(--blue)}
-  .invert .sub{color:var(--ink-soft)}
-  .contact .btn{border-color:var(--blue);color:var(--blue)}
-  .contact .btn:hover,.contact .btn.solid{background:var(--blue);color:#fff}
   @media(max-width:480px){.hero-cta{flex-wrap:wrap}.contact .btn{letter-spacing:.08em;padding:15px 18px}footer{gap:16px;flex-wrap:wrap}}
 </style>
 <script src="site-storage.js"></script>
@@ -239,7 +234,7 @@
   <div class="wrap">
     <div class="sec-top reveal"><h2>About</h2><span class="ey idx">01 — Profile</span></div>
     <div class="about-grid">
-      <img class="portrait reveal" src="assets/portrait-transparent.png" alt="Douglas Larsen" width="1000" height="1000">
+      <img class="portrait reveal" src="assets/portrait_bw.png" alt="Douglas Larsen" width="1000" height="1000">
       <div class="reveal">
         <p class="big">Design is my passion — and I believe a <em>designer's mindset</em> is all that's needed to design anything.</p>
         <p>Aesthetics and style change over time, but design thinking is about solving problems with an open, curious mind. Through this approach I've designed multi-million dollar homes, offices for international companies, a product collaboration with a celebrity, social campaigns for Chase Bank, and many other diverse projects.</p>

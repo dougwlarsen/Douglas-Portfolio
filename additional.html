@@ -39,7 +39,7 @@
   .hero h1 .tilt{display:inline-block;transform:rotate(-3deg)}
   .note{font-family:var(--mono);max-width:540px;margin-top:26px;color:var(--white);font-size:14px;border-left:3px solid var(--orange);padding-left:16px;transform:rotate(.4deg)}
   .note b{color:var(--yellow)}
-  .ghostword{display:none;position:absolute;font-family:var(--anton);text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,210,63,.10);z-index:0;pointer-events:none;line-height:.8}
+  .ghostword{position:absolute;font-family:var(--anton);text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,210,63,.10);z-index:0;pointer-events:none;line-height:.8}
 
   /* category */
   .cat{padding:64px 0 20px;position:relative}
@@ -98,13 +98,8 @@
   }
   @media(max-width:480px){nav:not(.rail){gap:12px;flex-wrap:wrap}.brand{letter-spacing:.12em}}
 
-  body{background:#FFFFEB;color:#101018}
-  nav{background:rgba(255,255,235,.97)}
-  .hero,.cat,footer{--white:#101018;--dim:#6a6a78;--yellow:#805800;--orange:#b84600}
-  nav .tag{color:#6a6a78}nav .back{color:#805800;border-color:#805800}
-  .card{background:#FFFFEB;border-color:rgba(16,16,24,.18)}
-  .bit.frame img{border-color:#FFFFEB}
   @media(max-width:480px){.hero h1{font-size:clamp(38px,11vw,52px)}}
+  @media(max-width:480px){.ghostword{display:none}}
 </style>
 <script src="site-storage.js"></script>
 </head>

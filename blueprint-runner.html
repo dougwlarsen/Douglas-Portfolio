@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#FFFFEB;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
+  :root{--paper:#fff2eb;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
     --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -23,7 +23,7 @@
   .back:hover{border-color:var(--blue);color:var(--blue)}
   .stage{position:relative;width:min(92vw,940px);box-shadow:0 20px 60px rgba(58,48,232,.14);border:1px solid rgba(58,48,232,.18);border-radius:6px;overflow:hidden}
   canvas{display:block;width:100%;height:auto}
-  .over{position:absolute;inset:0;background:rgba(255,255,235,.93);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+  .over{position:absolute;inset:0;background:rgba(255,242,235,.93);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
   .over.show{display:flex}
   .over h1{font-family:var(--serif);font-size:clamp(38px,6vw,58px);font-weight:600;line-height:1;text-transform:uppercase}
   .over .big{font-family:var(--serif);font-size:clamp(56px,10vw,84px);color:var(--blue);line-height:1;margin:6px 0}
@@ -65,7 +65,7 @@
 <script>
 const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 const W=900,H=420, GROUND=H-64;
-const BLUE='#3a30e8', DEEP='#2019b0', CREAM='#FFFFEB';
+const BLUE='#3a30e8', DEEP='#2019b0', CREAM='#fff2eb';
 const SWATCH=['#6f66ff','#660000','#c5cf17','#006442','#cfd6ff','#eb593d'];
 let dpr=Math.min(window.devicePixelRatio||1,2);
 cv.width=W*dpr; cv.height=H*dpr; ctx.scale(dpr,dpr);
