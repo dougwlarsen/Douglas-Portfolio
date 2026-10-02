@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Douglas Larsen — Principal Interior Designer</title>
+<meta name="description" content="Explore Douglas Larsen’s interior design portfolio, residential and workplace projects, custom furniture process, and design experience in New York City.">
+<title>Douglas Larsen — Senior Interior Designer</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -13,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#fff2eb; --blue:#3a30e8; --blue-deep:#2019b0;
+    --paper:#FFFFEB; --blue:#3a30e8; --blue-deep:#2019b0;
     --ink:#101018; --ink-soft:#6a6a78; --line:rgba(16,16,24,.14);
     --serif:'Cormorant',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
   }
@@ -29,7 +30,7 @@
 
   /* Nav */
   nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-    padding:18px 40px;background:rgba(255,242,235,.97);border-bottom:1px solid var(--line);transition:.3s}
+    padding:18px 40px;background:rgba(255,255,235,.97);border-bottom:1px solid var(--line);transition:.3s}
   nav .brand{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:700}
   nav .brand b{color:var(--blue)}
   .nav-links{display:flex;gap:30px}
@@ -171,14 +172,33 @@
   @media(max-width:860px){
     .wrap{padding:0 24px}nav{padding:16px 24px}
     .nav-links{position:fixed;inset:0;background:var(--paper);flex-direction:column;justify-content:center;align-items:center;gap:30px;transform:translateX(100%);transition:transform .4s;z-index:90}
-    .nav-links.open{transform:none}.nav-links a{font-size:15px}
+    .nav-links{visibility:hidden}.nav-links.open{transform:none;visibility:visible}.nav-links a{font-size:15px}
     .menu-btn{display:block;z-index:95}
     .about-grid,.exp-cols,.duo{grid-template-columns:1fr;gap:36px}
     .stats{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:28px;flex-direction:row;flex-wrap:wrap;gap:24px 40px}
     .row{grid-template-columns:1fr;gap:14px}.row .meta{grid-row:auto;grid-column:1;justify-content:flex-start}
     .sk{display:none}.lb-stage{padding:0 12px}
   }
+
+  :focus-visible{outline:3px solid #3a30e8;outline-offset:5px}
+  html{scroll-padding-top:100px}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal,.sk,.card{opacity:1;transform:none}
+  }
+  @media(max-width:480px){nav:not(.rail){gap:12px;flex-wrap:wrap}.brand{letter-spacing:.12em}}
+
+  .lb-thumbs{flex-wrap:nowrap;justify-content:flex-start;max-height:90px}
+  .lb-thumbs img{flex-shrink:0}
+  .invert,.contact{background:var(--paper);color:var(--ink)}
+  .invert .kicker,.contact .kicker,.invert h2 em{color:var(--blue)}
+  .invert .sub{color:var(--ink-soft)}
+  .contact .btn{border-color:var(--blue);color:var(--blue)}
+  .contact .btn:hover,.contact .btn.solid{background:var(--blue);color:#fff}
+  @media(max-width:480px){.hero-cta{flex-wrap:wrap}.contact .btn{letter-spacing:.08em;padding:15px 18px}footer{gap:16px;flex-wrap:wrap}}
 </style>
+<script src="site-storage.js"></script>
 </head>
 <body>
 
@@ -191,7 +211,7 @@
     <a href="#experience" onclick="closeMenu()">Experience</a>
     <a href="#contact" onclick="closeMenu()">Contact</a>
   </div>
-  <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰</button>
+  <button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false" aria-controls="navlinks" onclick="toggleMenu()">☰</button>
 </nav>
 
 <!-- HERO -->
@@ -203,7 +223,7 @@
     <h1 class="hero-h">Designing Spaces<br>Where <em>Color</em> &amp;<br><em>Light</em> Meet</h1>
     <div class="hero-sub">
       <span class="n">Douglas Larsen</span>
-      <span class="r">Principal Interior Designer — New York City</span>
+      <span class="r">Senior Interior Designer — New York City</span>
     </div>
     <div class="hero-cta">
       <a class="btn solid" href="#work">View Work</a>
@@ -219,7 +239,7 @@
   <div class="wrap">
     <div class="sec-top reveal"><h2>About</h2><span class="ey idx">01 — Profile</span></div>
     <div class="about-grid">
-      <img class="portrait reveal" src="assets/portrait_bw.png" alt="Douglas Larsen" width="1000" height="1000">
+      <img class="portrait reveal" src="assets/portrait-transparent.png" alt="Douglas Larsen" width="1000" height="1000">
       <div class="reveal">
         <p class="big">Design is my passion — and I believe a <em>designer's mindset</em> is all that's needed to design anything.</p>
         <p>Aesthetics and style change over time, but design thinking is about solving problems with an open, curious mind. Through this approach I've designed multi-million dollar homes, offices for international companies, a product collaboration with a celebrity, social campaigns for Chase Bank, and many other diverse projects.</p>
@@ -331,19 +351,19 @@
 
 <footer class="wrap">
   <span>© 2026 Douglas Larsen</span>
-  <span>Principal Interior Designer — NYC</span>
+  <span>Senior Interior Designer — NYC</span>
 </footer>
 
 <!-- Lightbox -->
-<div class="lb" id="lb">
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
   <div class="lb-top">
     <div class="lb-title" id="lbTitle">Project<small id="lbSub"></small></div>
-    <button class="lb-close" onclick="closeLb()">✕</button>
+    <button class="lb-close" aria-label="Close gallery" onclick="closeLb()">✕</button>
   </div>
   <div class="lb-stage">
-    <button class="lb-arrow lb-prev" onclick="step(-1)">‹</button>
-    <img id="lbImg" src="" alt="">
-    <button class="lb-arrow lb-next" onclick="step(1)">›</button>
+    <button class="lb-arrow lb-prev" aria-label="Previous photograph" onclick="step(-1)">‹</button>
+    <img id="lbImg" alt="">
+    <button class="lb-arrow lb-next" aria-label="Next photograph" onclick="step(1)">›</button>
   </div>
   <div class="lb-thumbs" id="lbThumbs"></div>
 </div>
@@ -371,6 +391,9 @@
   projects.forEach((p,idx)=>{
     const el=document.createElement('div');
     el.className='row reveal';
+    el.tabIndex=0; el.setAttribute('role','button'); el.setAttribute('aria-haspopup','dialog');
+    el.setAttribute('aria-label','View '+p.name+' gallery');
+    el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openLb(idx);}};
     el.innerHTML=`<div><div class="name">${p.name}</div><div class="desc">${p.desc}</div><div class="count">${p.n} photographs</div></div>
       <div class="meta"><span class="tag">${p.tag}</span><span class="arrow">↗</span></div>`;
     el.onclick=()=>openLb(idx);
@@ -379,26 +402,33 @@
 
   const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),
         lbTitle=document.getElementById('lbTitle'),lbSub=document.getElementById('lbSub'),lbThumbs=document.getElementById('lbThumbs');
-  let cur=0,curImgs=[];
+  let cur=0,curImgs=[],galleryName='',returnFocus=null;
   function openLb(idx){
-    const p=projects[idx];curImgs=imgs(p);cur=0;
+    const p=projects[idx];curImgs=imgs(p);cur=0;galleryName=p.name;returnFocus=document.activeElement;
     lbTitle.childNodes[0].nodeValue=p.name;lbSub.textContent=p.tag;
     lbThumbs.innerHTML='';
-    curImgs.forEach((src,i)=>{const t=document.createElement('img');t.src=src;t.onclick=()=>show(i);lbThumbs.appendChild(t);});
-    show(0);lb.classList.add('open');document.body.style.overflow='hidden';
+    curImgs.forEach((src,i)=>{const t=document.createElement('img');t.src=src;t.alt=p.name+' photograph '+(i+1);t.tabIndex=0;t.setAttribute('role','button');t.onclick=()=>show(i);t.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();show(i);}};lbThumbs.appendChild(t);});
+    show(0);lb.classList.add('open');document.body.style.overflow='hidden';lb.querySelector('.lb-close').focus();
   }
-  function show(i){cur=(i+curImgs.length)%curImgs.length;lbImg.src=curImgs[cur];
+  function show(i){cur=(i+curImgs.length)%curImgs.length;lbImg.src=curImgs[cur];lbImg.alt=galleryName+' photograph '+(cur+1)+' of '+curImgs.length;
     [...lbThumbs.children].forEach((t,j)=>t.classList.toggle('active',j===cur));
     lbThumbs.children[cur]?.scrollIntoView({inline:'center',block:'nearest'});}
   function step(d){show(cur+d);}
-  function closeLb(){lb.classList.remove('open');document.body.style.overflow='';}
+  function closeLb(){lb.classList.remove('open');document.body.style.overflow='';returnFocus?.focus();}
   lb.addEventListener('click',e=>{if(e.target===lb)closeLb();});
   document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;
+    if(e.key==='Tab'){
+      const controls=[...lb.querySelectorAll('button,[tabindex="0"]')];
+      const first=controls[0],last=controls[controls.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+    }
     if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1);});
 
   const navlinks=document.getElementById('navlinks'),menuBtn=document.getElementById('menuBtn');
-  function toggleMenu(){navlinks.classList.toggle('open');menuBtn.textContent=navlinks.classList.contains('open')?'✕':'☰';}
-  function closeMenu(){navlinks.classList.remove('open');menuBtn.textContent='☰';}
+  function toggleMenu(){const open=navlinks.classList.toggle('open');menuBtn.textContent=open?'✕':'☰';menuBtn.setAttribute('aria-expanded',open);menuBtn.setAttribute('aria-label',open?'Close navigation':'Open navigation');}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navlinks.classList.contains('open')){closeMenu();menuBtn.focus();}});
+  function closeMenu(){navlinks.classList.remove('open');menuBtn.textContent='☰';menuBtn.setAttribute('aria-expanded','false');menuBtn.setAttribute('aria-label','Open navigation');}
 
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.15});
   document.querySelectorAll('.reveal, .sk').forEach(el=>io.observe(el));
@@ -408,9 +438,9 @@
     const btn=document.getElementById('cotdBtn'); if(!btn) return;
     const today=new Date().toISOString().slice(0,10);
     const set=hex=>{ btn.style.background=hex; };
-    const cached=localStorage.getItem('cotd_btn_'+today);
+    const cached=siteStorage.getItem('cotd_btn_'+today);
     if(cached){ set(cached); return; }
-    try{ const full=JSON.parse(localStorage.getItem('cotd_'+today)||'null'); if(full&&full.winner){ set(full.winner); localStorage.setItem('cotd_btn_'+today,full.winner); return; } }catch(e){}
+    try{ const full=JSON.parse(siteStorage.getItem('cotd_'+today)||'null'); if(full&&full.winner){ set(full.winner); siteStorage.setItem('cotd_btn_'+today,full.winner); return; } }catch(e){}
     const KEY='SWAojVJs9NvDXZZhKmV2oH_pZW74Yag84NN7Z5h3Et0';
     fetch('https://api.unsplash.com/photos?order_by=latest&per_page=30&page=1',{headers:{'Authorization':'Client-ID '+KEY,'Accept-Version':'v1'}})
       .then(r=>r.ok?r.json():null).then(data=>{
@@ -421,7 +451,7 @@
         if(!bk) return;
         const a=buckets[bk].reduce((x,c)=>[x[0]+c[0],x[1]+c[1],x[2]+c[2]],[0,0,0]).map(v=>Math.round(v/buckets[bk].length));
         const hex='#'+a.map(v=>v.toString(16).padStart(2,'0')).join('');
-        set(hex); localStorage.setItem('cotd_btn_'+today,hex);
+        set(hex); siteStorage.setItem('cotd_btn_'+today,hex);
       }).catch(()=>{});
   })();
 </script>

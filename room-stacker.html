@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Plan Stack — Douglas Larsen</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#fff2eb;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
+  :root{--paper:#FFFFEB;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
     --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -28,7 +28,7 @@
   .score small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px}
   .best{text-align:right;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
   .hint{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);pointer-events:none;transition:opacity .4s}
-  .over{position:absolute;inset:0;background:rgba(255,242,235,.92);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+  .over{position:absolute;inset:0;background:rgba(255,255,235,.92);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
   .over.show{display:flex}
   .over h1{font-family:var(--serif);font-size:52px;font-weight:600;line-height:1;text-transform:uppercase}
   .over p{margin-top:14px;color:var(--ink-soft);font-size:15px}
@@ -38,7 +38,22 @@
   .btn:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
   .btn.ghost{background:none;color:var(--blue);margin-left:10px}
   .btn.ghost:hover{background:var(--blue);color:#fff}
+
+  :focus-visible{outline:3px solid #3a30e8;outline-offset:5px}
+  html{scroll-padding-top:100px}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal,.sk,.card{opacity:1;transform:none}
+  }
+  @media(max-width:480px){nav:not(.rail){gap:12px;flex-wrap:wrap}.brand{letter-spacing:.12em}}
+
+  .stage{width:min(460px,calc(100vw - 24px),calc((100dvh - 100px)*460/720));flex-shrink:0}
+  canvas{width:100%!important;height:auto!important;aspect-ratio:460/720}
+  .top{gap:12px}.top .brand{flex:1}.top .back{flex-shrink:0}
+  @media(max-height:650px){.over{padding:12px}.over h1{font-size:32px}.over .big{font-size:42px}.btn{padding:10px 18px;margin-top:10px}}
 </style>
+<script src="site-storage.js"></script>
 </head>
 <body>
   <div class="top">
@@ -77,12 +92,12 @@ const engine=Engine.create();
 engine.gravity.y=1.1;
 const render=Render.create({canvas,engine,options:{width:W,height:H,
   pixelRatio:Math.min(window.devicePixelRatio||1,2),
-  wireframes:false,background:'#fff2eb',hasBounds:true}});
+  wireframes:false,background:'#FFFFEB',hasBounds:true}});
 render.bounds.min={x:0,y:0}; render.bounds.max={x:W,y:H};
 const ctx=render.context;
 
 let platform, camY, camTarget, score, best, state, cur, preview, dropAt, over;
-best=Number(localStorage.getItem('rs_best')||0); document.getElementById('best').textContent=best;
+best=Number(siteStorage.getItem('rs_best')||0); document.getElementById('best').textContent=best;
 
 function reset(){
   Composite.clear(engine.world,false);
@@ -126,7 +141,7 @@ function towerTop(){
 }
 function gameOver(msg){
   over=true; state='done';
-  if(score>best){best=score;localStorage.setItem('rs_best',best);}
+  if(score>best){best=score;siteStorage.setItem('rs_best',best);}
   document.getElementById('best').textContent=best;
   document.getElementById('finalScore').textContent=score;
   document.getElementById('overMsg').textContent=msg;
@@ -218,7 +233,7 @@ function drawRoom(c,w,h,tpl,color){
   c.lineWidth=2.2; c.strokeStyle='#2019b0'; c.stroke();
   c.save();
   roundRect(c,x+2,y+2,w-4,h-4,4); c.clip();
-  c.strokeStyle='rgba(255,242,235,.92)'; c.fillStyle='rgba(255,242,235,.13)'; c.lineWidth=1.3; c.lineJoin='round';
+  c.strokeStyle='rgba(255,255,235,.92)'; c.fillStyle='rgba(255,255,235,.13)'; c.lineWidth=1.3; c.lineJoin='round';
   const p=7, ix=x+p, iy=y+p, iw=w-2*p, ih=h-2*p, m=Math.min(iw,ih);
   if(tpl==='living'){                       // two facing sofas + coffee table + pouf
     sofaV(c,ix,iy,iw*0.2,ih,3);
@@ -259,7 +274,7 @@ function drawRoom(c,w,h,tpl,color){
 }
 
 // input
-function press(e){ if(e.type==='keydown'&&e.code!=='Space')return; if(e.cancelable)e.preventDefault();
+function press(e){ if(e.target.closest('a,button,input'))return; if(e.type==='keydown'&&e.code!=='Space')return; if(e.cancelable)e.preventDefault();
   if(over)return; if(actx&&actx.state==='suspended')actx.resume(); drop(); }
 window.addEventListener('pointerdown',press);
 window.addEventListener('keydown',press);

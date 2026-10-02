@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BlueSprint — Douglas Larsen</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#fff2eb;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
+  :root{--paper:#FFFFEB;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;
     --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -23,7 +23,7 @@
   .back:hover{border-color:var(--blue);color:var(--blue)}
   .stage{position:relative;width:min(92vw,940px);box-shadow:0 20px 60px rgba(58,48,232,.14);border:1px solid rgba(58,48,232,.18);border-radius:6px;overflow:hidden}
   canvas{display:block;width:100%;height:auto}
-  .over{position:absolute;inset:0;background:rgba(255,242,235,.93);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+  .over{position:absolute;inset:0;background:rgba(255,255,235,.93);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
   .over.show{display:flex}
   .over h1{font-family:var(--serif);font-size:clamp(38px,6vw,58px);font-weight:600;line-height:1;text-transform:uppercase}
   .over .big{font-family:var(--serif);font-size:clamp(56px,10vw,84px);color:var(--blue);line-height:1;margin:6px 0}
@@ -33,7 +33,17 @@
   .btn:hover{background:var(--blue-deep)}
   .btn.ghost{background:none;color:var(--blue);margin-left:8px}
   .btn.ghost:hover{background:var(--blue);color:#fff}
+
+  :focus-visible{outline:3px solid #3a30e8;outline-offset:5px}
+  html{scroll-padding-top:100px}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal,.sk,.card{opacity:1;transform:none}
+  }
+  @media(max-width:480px){nav:not(.rail){gap:12px;flex-wrap:wrap}.brand{letter-spacing:.12em}}
 </style>
+<script src="site-storage.js"></script>
 </head>
 <body>
   <div class="top">
@@ -55,13 +65,13 @@
 <script>
 const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 const W=900,H=420, GROUND=H-64;
-const BLUE='#3a30e8', DEEP='#2019b0', CREAM='#fff2eb';
+const BLUE='#3a30e8', DEEP='#2019b0', CREAM='#FFFFEB';
 const SWATCH=['#6f66ff','#660000','#c5cf17','#006442','#cfd6ff','#eb593d'];
 let dpr=Math.min(window.devicePixelRatio||1,2);
 cv.width=W*dpr; cv.height=H*dpr; ctx.scale(dpr,dpr);
 
 let runner, obs, swatches, speed, dist, picks, frame, over, best, spawnT, swT, shake;
-best=Number(localStorage.getItem('br_best')||0);
+best=Number(siteStorage.getItem('br_best')||0);
 
 function reset(){
   runner={x:130,y:GROUND,vy:0,w:26,h:42,onGround:true,jumps:0,run:0};
@@ -94,7 +104,7 @@ function hit(a,ox,oy,ow,oh){ // AABB vs runner (a)
 }
 function gameOver(){
   over=true; shake=14;
-  if(Math.floor(score())>best){best=Math.floor(score());localStorage.setItem('br_best',best);}
+  if(Math.floor(score())>best){best=Math.floor(score());siteStorage.setItem('br_best',best);}
   document.getElementById('final').textContent=Math.floor(score());
   document.getElementById('msg').textContent=`Distance ${Math.floor(dist/10)} · ${picks} swatches · Best ${best}`;
   document.getElementById('over').classList.add('show');
@@ -239,7 +249,7 @@ function tone(f,d,t,g){ if(!actx)return; const o=actx.createOscillator(),ga=actx
 function blip(f,d){tone(f,d,'square',0.045);}
 function crash(){tone(140,0.3,'sawtooth',0.08);setTimeout(()=>tone(90,0.4,'sawtooth',0.07),110);}
 
-function press(e){ if(e.type==='keydown'&&e.code!=='Space'&&e.code!=='ArrowUp')return; if(e.cancelable)e.preventDefault();
+function press(e){ if(e.target.closest('a,button,input'))return; if(e.type==='keydown'&&e.code!=='Space'&&e.code!=='ArrowUp')return; if(e.cancelable)e.preventDefault();
   if(actx&&actx.state==='suspended')actx.resume();
   if(over)return; jump(); }
 window.addEventListener('pointerdown',press);
