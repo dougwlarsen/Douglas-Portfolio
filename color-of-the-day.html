@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#fff2eb;--blue:#3a30e8;--blue-deep:#2019b0;--ink:#101018;--ink-soft:#6a6a78;--line:rgba(16,16,24,.14);
+  :root{--paper:#c76b44;--blue:#c4d5f2;--blue-deep:#c4d5f2;--ink:#c4d5f2;--ink-soft:#c4d5f2;--line:rgba(196,213,242,.14);
     --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
@@ -24,25 +24,25 @@
   .ey{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--blue);font-weight:600}
   h1{font-family:var(--serif);text-transform:uppercase;font-weight:600;font-size:clamp(40px,8vw,84px);line-height:.98;margin-top:14px}
   .sub{color:var(--ink-soft);margin-top:12px;font-size:15px}
-  .card{border:1px solid var(--line);border-radius:8px;padding:26px;margin:26px 0;background:rgba(255,255,255,.35)}
+  .card{border:1px solid var(--line);border-radius:8px;padding:26px;margin:26px 0;background:rgba(199,107,68,.35)}
   label{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
-  input{width:100%;padding:13px 16px;border:1px solid var(--line);border-radius:8px;font-family:var(--sans);font-size:14px;background:#fff}
+  input{width:100%;padding:13px 16px;border:1px solid var(--line);border-radius:8px;font-family:var(--sans);font-size:14px;color:var(--blue);background:#c76b44}
   input:focus{outline:none;border-color:var(--blue)}
   .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px}
-  .btn{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;padding:14px 30px;border:1px solid var(--blue);color:#fff;background:var(--blue);border-radius:40px;cursor:pointer}
+  .btn{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;padding:14px 30px;border:1px solid var(--blue);color:#c76b44;background:var(--blue);border-radius:40px;cursor:pointer}
   .btn:hover{background:var(--blue-deep)}
   .btn[disabled]{opacity:.5;cursor:default}
   .btn.ghost{background:none;color:var(--blue)}
-  .btn.ghost:hover{background:var(--blue);color:#fff}
+  .btn.ghost:hover{background:var(--blue);color:#c76b44}
   .hint{font-size:12px;color:var(--ink-soft);margin-top:12px}
   .hint a{color:var(--blue);text-decoration:underline}
   .status{margin-top:16px;font-size:13px;color:var(--ink-soft)}
-  .err{color:#b3251b}
+  .err{color:#c4d5f2}
 
   .result{display:none}
   .result.show{display:block}
-  .colorblock{border-radius:14px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.16)}
-  .swatch{min-height:min(56vh,440px);padding:26px 28px;color:#fff;position:relative;display:flex;flex-direction:column;justify-content:flex-end}
+  .colorblock{border-radius:14px;overflow:hidden;box-shadow:0 24px 70px rgba(196,213,242,.16)}
+  .swatch{min-height:min(56vh,440px);padding:26px 28px;color:#c76b44;position:relative;display:flex;flex-direction:column;justify-content:flex-end}
   .swatch .date{font-size:10px;letter-spacing:.24em;text-transform:uppercase;opacity:.8}
   .swatch .hex{font-family:var(--serif);font-weight:600;font-size:clamp(26px,5vw,44px);line-height:1;margin:6px 0 3px;text-transform:uppercase}
   .swatch .meta{font-size:10.5px;letter-spacing:.02em;opacity:.85}
@@ -54,7 +54,7 @@
   .foot{margin-top:26px;font-size:11px;color:var(--ink-soft);text-align:center}
   .foot a{color:var(--blue)}
 
-  :focus-visible{outline:3px solid #3a30e8;outline-offset:5px}
+  :focus-visible{outline:3px solid #c4d5f2;outline-offset:5px}
   html{scroll-padding-top:100px}
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -176,7 +176,7 @@ function aggregate(hexes, date, fallback, samples){
 function render(res){
   $('result').classList.add('show');
   const sw=$('swatch'); sw.style.background=res.winner;
-  const dark=luma(res.winner)<140; sw.style.color=dark?'#fff':'#101018';
+  const dark=luma(res.winner)<140; sw.style.color=dark?'#c76b44':'#c4d5f2';
   $('rdate').textContent=(res.fallback?'Most recent uploads · ':'')+new Date(res.date+'T12:00:00Z').toLocaleDateString(undefined,{timeZone:'UTC',weekday:'long',month:'long',day:'numeric'});
   $('rhex').textContent=res.winner;
   $('rmeta').textContent=`${res.pct}% of ${res.count} photos landed in this color family · overall average ${res.avg}`;
