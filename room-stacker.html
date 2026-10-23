@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#c76b44;--blue:#c4d5f2;--blue-deep:#c4d5f2;--ink:#c4d5f2;--ink-soft:#c4d5f2;
+  :root{--paper:#c4d5f2;--blue:#c76b44;--blue-deep:#c76b44;--ink:#c76b44;--ink-soft:#c76b44;
     --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -19,27 +19,27 @@
   .top{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px 22px;z-index:5}
   .brand{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:700}
   .brand b{color:var(--blue)}
-  .back{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);border:1px solid rgba(196,213,242,.18);border-radius:40px;padding:8px 16px}
+  .back{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);border:1px solid rgba(199,107,68,.18);border-radius:40px;padding:8px 16px}
   .back:hover{border-color:var(--blue);color:var(--blue)}
-  .stage{position:relative;box-shadow:0 20px 60px rgba(196,213,242,.14);border:1px solid rgba(196,213,242,.18);border-radius:6px;overflow:hidden}
+  .stage{position:relative;box-shadow:0 20px 60px rgba(199,107,68,.14);border:1px solid rgba(199,107,68,.18);border-radius:6px;overflow:hidden}
   canvas{display:block}
   .hud{position:absolute;top:0;left:0;right:0;padding:14px 18px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
   .score{font-family:var(--serif);font-size:44px;font-weight:600;line-height:.9;color:var(--blue)}
   .score small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px}
   .best{text-align:right;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
   .hint{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);pointer-events:none;transition:opacity .4s}
-  .over{position:absolute;inset:0;background:rgba(199,107,68,.92);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+  .over{position:absolute;inset:0;background:rgba(196,213,242,.92);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
   .over.show{display:flex}
   .over h1{font-family:var(--serif);font-size:52px;font-weight:600;line-height:1;text-transform:uppercase}
   .over p{margin-top:14px;color:var(--ink-soft);font-size:15px}
   .over .big{font-family:var(--serif);font-size:80px;color:var(--blue);line-height:1;margin:10px 0}
   .btn{margin-top:22px;display:inline-block;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
-    padding:15px 34px;border:1px solid var(--blue);color:#c76b44;background:var(--blue);border-radius:40px;cursor:pointer;pointer-events:auto}
+    padding:15px 34px;border:1px solid var(--blue);color:#c4d5f2;background:var(--blue);border-radius:40px;cursor:pointer;pointer-events:auto}
   .btn:hover{background:var(--blue-deep);border-color:var(--blue-deep)}
   .btn.ghost{background:none;color:var(--blue);margin-left:10px}
-  .btn.ghost:hover{background:var(--blue);color:#c76b44}
+  .btn.ghost:hover{background:var(--blue);color:#c4d5f2}
 
-  :focus-visible{outline:3px solid #c4d5f2;outline-offset:5px}
+  :focus-visible{outline:3px solid #c76b44;outline-offset:5px}
   html{scroll-padding-top:100px}
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -84,7 +84,7 @@
 const {Engine,Render,Runner,Bodies,Body,Composite,Events}=Matter;
 const W=460,H=720;
 const PLATFORM_TOP=582, FAIL_Y=690;      // world y where a fallen piece = game over
-const COLORS=['#c4d5f2','#c4d5f2','#c4d5f2','#c4d5f2','#c4d5f2','#c4d5f2','#c4d5f2'];
+const COLORS=['#c76b44','#c76b44','#c76b44','#c76b44','#c76b44','#c76b44','#c76b44'];
 const ROOM_TPLS=['living','bedroom','dining','kitchen','office','bath'];
 
 const canvas=document.getElementById('c');
@@ -92,7 +92,7 @@ const engine=Engine.create();
 engine.gravity.y=1.1;
 const render=Render.create({canvas,engine,options:{width:W,height:H,
   pixelRatio:Math.min(window.devicePixelRatio||1,2),
-  wireframes:false,background:'#c76b44',hasBounds:true}});
+  wireframes:false,background:'#c4d5f2',hasBounds:true}});
 render.bounds.min={x:0,y:0}; render.bounds.max={x:W,y:H};
 const ctx=render.context;
 
@@ -106,7 +106,7 @@ function reset(){
   document.getElementById('over').classList.remove('show');
   document.getElementById('hint').style.opacity='1';
   platform=Bodies.rectangle(W/2,PLATFORM_TOP+20,190,40,{isStatic:true,
-    friction:1,render:{fillStyle:'#c76b44',strokeStyle:'#c4d5f2',lineWidth:2}});
+    friction:1,render:{fillStyle:'#c4d5f2',strokeStyle:'#c76b44',lineWidth:2}});
   // legs (visual)
   Composite.add(engine.world,[platform]);
   newPreview();
@@ -179,7 +179,7 @@ Events.on(engine,'afterUpdate',()=>{
 // draw every room piece + preview + floor on top of the physics render
 Events.on(render,'afterRender',()=>{
   const c=ctx; c.save();
-  c.strokeStyle='rgba(196,213,242,.25)'; c.lineWidth=1;
+  c.strokeStyle='rgba(199,107,68,.25)'; c.lineWidth=1;
   c.beginPath(); c.moveTo(0,PLATFORM_TOP+42-camY); c.lineTo(W,PLATFORM_TOP+42-camY); c.stroke();
   for(const b of Composite.allBodies(engine.world)){
     if(b.isStatic||!b.plan) continue;
@@ -193,7 +193,7 @@ Events.on(render,'afterRender',()=>{
     const sy=95;
     c.save(); c.globalAlpha=0.96; c.translate(preview.x,sy);
     drawRoom(c,preview.w,preview.h,preview.tpl,preview.color); c.restore();
-    c.globalAlpha=0.35; c.setLineDash([4,6]); c.strokeStyle='#c4d5f2'; c.lineWidth=2;
+    c.globalAlpha=0.35; c.setLineDash([4,6]); c.strokeStyle='#c76b44'; c.lineWidth=2;
     c.beginPath(); c.moveTo(preview.x,sy+preview.h/2); c.lineTo(preview.x,H); c.stroke();
     c.setLineDash([]); c.globalAlpha=1;
   }
@@ -230,10 +230,10 @@ function chairsRow(c,x,y,w,gap,n,dir){ // dining chairs along a row
 function drawRoom(c,w,h,tpl,color){
   const x=-w/2,y=-h/2;
   roundRect(c,x,y,w,h,5); c.fillStyle=color; c.fill();
-  c.lineWidth=2.2; c.strokeStyle='#c4d5f2'; c.stroke();
+  c.lineWidth=2.2; c.strokeStyle='#c76b44'; c.stroke();
   c.save();
   roundRect(c,x+2,y+2,w-4,h-4,4); c.clip();
-  c.strokeStyle='rgba(199,107,68,.92)'; c.fillStyle='rgba(199,107,68,.13)'; c.lineWidth=1.3; c.lineJoin='round';
+  c.strokeStyle='rgba(196,213,242,.92)'; c.fillStyle='rgba(196,213,242,.13)'; c.lineWidth=1.3; c.lineJoin='round';
   const p=7, ix=x+p, iy=y+p, iw=w-2*p, ih=h-2*p, m=Math.min(iw,ih);
   if(tpl==='living'){                       // two facing sofas + coffee table + pouf
     sofaV(c,ix,iy,iw*0.2,ih,3);

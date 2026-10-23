@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#c76b44;--blue:#c4d5f2;--blue-deep:#c4d5f2;--ink:#c4d5f2;--ink-soft:#c4d5f2;--line:rgba(196,213,242,.14);
+  :root{--paper:#c4d5f2;--blue:#c76b44;--blue-deep:#c76b44;--ink:#c76b44;--ink-soft:#c76b44;--line:rgba(199,107,68,.14);
     --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -20,7 +20,7 @@
   .ey{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--blue);font-weight:600}
 
   nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-    padding:18px 40px;background:rgba(199,107,68,.95);border-bottom:1px solid var(--line)}
+    padding:18px 40px;background:rgba(196,213,242,.95);border-bottom:1px solid var(--line)}
   nav .brand{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:700}
   nav .brand b{color:var(--blue)}
   nav .back{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);border:1px solid var(--line);border-radius:40px;padding:8px 16px}
@@ -53,15 +53,16 @@
   .stage h2{font-family:var(--serif);text-transform:uppercase;font-size:clamp(30px,4.2vw,58px);font-weight:500;line-height:1;letter-spacing:.01em}
   .stage p{margin-top:20px;font-size:17px;color:var(--ink-soft);max-width:46ch}
   .stage .tags{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
-  .stage .tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);border:1px solid rgba(196,213,242,.35);border-radius:40px;padding:6px 13px}
+  .stage .tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);border:1px solid rgba(199,107,68,.35);border-radius:40px;padding:6px 13px}
 
   .media{position:relative}
-  .media img{width:100%;height:auto;border-radius:4px;box-shadow:0 24px 60px rgba(196,213,242,.14)}
-  /* placeholder until real photos arrive */
-  .ph{aspect-ratio:4/3;border:2px dashed rgba(196,213,242,.4);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;
-    background:repeating-linear-gradient(135deg,rgba(196,213,242,.03),rgba(196,213,242,.03) 12px,transparent 12px,transparent 24px)}
-  .ph .k{font-family:var(--serif);font-size:26px;color:var(--blue);font-weight:500}
-  .ph .n{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:8px}
+  .media img{width:100%;height:auto;border-radius:4px;box-shadow:0 24px 60px rgba(199,107,68,.14)}
+  .media{display:grid;gap:18px}
+  .media figure{margin:0}
+  .media img{display:block;width:100%;height:auto;border-radius:3px;box-shadow:none;border:1px solid var(--line)}
+  .media figcaption{font-size:11px;line-height:1.6;letter-spacing:.04em;color:var(--ink-soft);margin-top:9px}
+  .media .fabric img{max-height:280px;object-fit:cover}
+  .media .drawing img{max-height:650px;object-fit:contain;background:rgba(199,107,68,.04)}
 
   footer{padding:120px 0 90px;text-align:center;border-top:1px solid var(--line)}
   footer .big{font-family:var(--serif);text-transform:uppercase;font-size:clamp(40px,8vw,96px);font-weight:500;line-height:1}
@@ -77,7 +78,7 @@
     .stage.alt .media{order:0}
   }
 
-  :focus-visible{outline:3px solid #c4d5f2;outline-offset:5px}
+  :focus-visible{outline:3px solid #c76b44;outline-offset:5px}
   html{scroll-padding-top:100px}
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -99,7 +100,7 @@
 <header class="wrap">
   <div class="ey eyebrow">The Process</div>
   <h1>Custom<br><em>Furniture</em></h1>
-  <p class="sub">How a bespoke piece goes from a room and a problem to a finished object — <em>drawn, tested, and made by hand.</em></p>
+  <p class="sub">A closer look at custom sofa design through the Summit and 481 Washington projects. <em>Room studies, material choices, drawings, and visualizations.</em></p>
   <div class="cue">Scroll</div>
 </header>
 
@@ -112,31 +113,161 @@
 
 <script>
   const stages=[
-    {n:"01",key:"Brief",title:"The Brief",need:"Room / mood reference",
-     copy:"Every custom piece starts with the room and the person. I map how the space is used, the sightlines, the light, and the exact problem the piece needs to solve.",
-     tags:["Site visit","Function","Constraints"]},
-    {n:"02",key:"Concept",title:"Concept & Sketch",need:"Hand sketch",
-     copy:"Quick hand sketches to find the form — proportion, stance, and the single idea that makes the piece feel inevitable in the space.",
-     tags:["Sketch","Proportion","Form study"]},
-    {n:"03",key:"Drawings",title:"Drawings & CAD",need:"CAD / shop drawing",
-     copy:"Concepts become precise drawings — dimensions, joinery, hardware, and shop-ready detail in AutoCAD, SketchUp, and Fusion 360.",
-     tags:["AutoCAD","SketchUp","Fusion 360","Joinery"]},
-    {n:"04",key:"Materials",title:"Materials & Finish",need:"Material / finish samples",
-     copy:"Selecting the woods, stone, metal, and finishes — because color and material carry the whole mood of a piece as much as its shape.",
-     tags:["Wood","Stone","Metal","Finish"]},
-    {n:"05",key:"Prototype",title:"Prototype",need:"Mockup / prototype photo",
-     copy:"Full-scale mockups to test comfort, scale, and detail in the real world — then refine until it's right.",
-     tags:["Mockup","Ergonomics","Refine"]},
-    {n:"06",key:"Install",title:"Fabrication & Install",need:"Finished piece in place",
-     copy:"Built alongside skilled makers, then placed and dialed in on site — the piece finally at home in the room it was drawn for.",
-     tags:["Fabrication","Makers","On-site"]},
-  ];
+  {
+    "n": "01",
+    "key": "Room",
+    "title": "Start With the Room",
+    "copy": "A custom sofa begins with its setting. A model of the room makes it possible to study circulation, sightlines, and the relationship between the sofa and the surrounding furniture.",
+    "tags": [
+      "Room study",
+      "Scale",
+      "481 Washington"
+    ],
+    "images": [
+      {
+        "src": "assets/process/washington-model.webp",
+        "alt": "SketchUp view of the custom corner sofa in the 481 Washington living room",
+        "caption": "481 Washington · SketchUp room study",
+        "kind": "",
+        "width": 1800,
+        "height": 1098
+      }
+    ]
+  },
+  {
+    "n": "02",
+    "key": "Options",
+    "title": "Explore the Form",
+    "copy": "Alternative layouts test the length of each return and how the seating meets at the corner. Comparing the options in the same room keeps the design grounded in the space.",
+    "tags": [
+      "Layout options",
+      "Proportion"
+    ],
+    "images": [
+      {
+        "src": "assets/process/washington-option-a.webp",
+        "alt": "Overhead rendering of the first sofa layout at 481 Washington",
+        "caption": "481 Washington · Layout option A",
+        "kind": "",
+        "width": 1800,
+        "height": 1440
+      },
+      {
+        "src": "assets/process/washington-option-c.webp",
+        "alt": "Overhead rendering of an alternative corner sofa configuration",
+        "caption": "481 Washington · Layout option C",
+        "kind": "",
+        "width": 1800,
+        "height": 1440
+      }
+    ]
+  },
+  {
+    "n": "03",
+    "key": "Details",
+    "title": "Draw the Details",
+    "copy": "The Summit sunroom sofa study brings the design into focus through annotated dimensions and upholstery details, including piping, seat cushions, and bolster pillows.",
+    "tags": [
+      "Design annotations",
+      "Upholstery",
+      "Summit"
+    ],
+    "images": [
+      {
+        "src": "assets/process/summit-annotated.webp",
+        "alt": "Annotated Summit custom sofa design with dimensions and piping notes",
+        "caption": "Summit · Annotated custom sofa study",
+        "kind": "drawing",
+        "width": 1176,
+        "height": 1800
+      }
+    ]
+  },
+  {
+    "n": "04",
+    "key": "Material",
+    "title": "Choose the Material",
+    "copy": "The Summit scheme uses Soane Britain Sargent Stripe in Emerald. The fabric and detail reference show how the stripe, piping, and upholstered edges contribute to the design.",
+    "tags": [
+      "Fabric",
+      "Pattern",
+      "Piping"
+    ],
+    "images": [
+      {
+        "src": "assets/process/summit-fabric.webp",
+        "alt": "Green and cream Soane Britain Sargent Stripe fabric",
+        "caption": "Summit · Sargent Stripe in Emerald",
+        "kind": "fabric",
+        "width": 1160,
+        "height": 813
+      },
+      {
+        "src": "assets/process/summit-detail.webp",
+        "alt": "Close view of the striped sofa upholstery and bolster reference",
+        "caption": "Summit · Upholstery detail reference",
+        "kind": "",
+        "width": 1389,
+        "height": 782
+      }
+    ]
+  },
+  {
+    "n": "05",
+    "key": "Refine",
+    "title": "Refine the Design",
+    "copy": "A closer rendering makes the cushion proportions and upholstered base easier to assess. This view records the developed design for the 481 Washington sofa.",
+    "tags": [
+      "Design development",
+      "Visualization"
+    ],
+    "images": [
+      {
+        "src": "assets/process/washington-final.webp",
+        "alt": "Developed rendering of the green custom sofa at 481 Washington",
+        "caption": "481 Washington · Developed design rendering",
+        "kind": "",
+        "width": 1726,
+        "height": 583
+      }
+    ]
+  },
+  {
+    "n": "06",
+    "key": "Present",
+    "title": "See It in Context",
+    "copy": "The Summit presentation places the proposed sofa in its sunroom setting. These views show how the shape and striped upholstery work with the windows and the light.",
+    "tags": [
+      "Presentation",
+      "Room visualization",
+      "Summit"
+    ],
+    "images": [
+      {
+        "src": "assets/process/summit-front.webp",
+        "alt": "Front view rendering of the striped Summit sofa in the sunroom",
+        "caption": "Summit · Front view rendering",
+        "kind": "",
+        "width": 1637,
+        "height": 917
+      },
+      {
+        "src": "assets/process/summit-corner.webp",
+        "alt": "Corner view rendering of the proposed Summit custom sofa",
+        "caption": "Summit · Corner view rendering",
+        "kind": "",
+        "width": 1800,
+        "height": 1013
+      }
+    ]
+  }
+];
   const main=document.getElementById('stages'), rail=document.querySelector('.rail');
   stages.forEach((s,i)=>{
     const sec=document.createElement('section');
     sec.className='stage reveal'+(i%2?' alt':''); sec.id='s'+s.n;
     sec.innerHTML=`<div class="wrap stage-grid">
-      <div class="media"><div class="ph"><div class="k">${s.title}</div><div class="n">Add: ${s.need}</div></div></div>
+      <div class="media">${s.images.map(im=>`<figure class="${im.kind}"><img src="${im.src}" alt="${im.alt}" width="${im.width}" height="${im.height}" loading="lazy" decoding="async"><figcaption>${im.caption}</figcaption></figure>`).join('')}</div>
       <div class="copy"><div class="num">${s.n}</div><div class="step">Step ${s.n}</div>
         <h2>${s.title}</h2><p>${s.copy}</p>
         <div class="tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>

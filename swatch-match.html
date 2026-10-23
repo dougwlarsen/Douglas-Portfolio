@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--paper:#c76b44;--blue:#c4d5f2;--blue-deep:#c4d5f2;--ink:#c4d5f2;--ink-soft:#c4d5f2;--line:rgba(196,213,242,.14);
+  :root{--paper:#c4d5f2;--blue:#c76b44;--blue-deep:#c76b44;--ink:#c76b44;--ink-soft:#c76b44;--line:rgba(199,107,68,.14);
     --serif:'Cormorant',Georgia,serif;--sans:'Inter',system-ui,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
@@ -31,29 +31,29 @@
   .best{text-align:right;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
 
   .prompt{display:flex;align-items:center;gap:16px}
-  .target{width:96px;height:96px;border-radius:12px;flex:none;box-shadow:0 12px 34px rgba(196,213,242,.14);border:1px solid rgba(196,213,242,.06)}
+  .target{width:96px;height:96px;border-radius:12px;flex:none;box-shadow:0 12px 34px rgba(199,107,68,.14);border:1px solid rgba(199,107,68,.06)}
   .prompt .t{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.05}
   .prompt .t small{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px}
-  .timer{height:8px;border-radius:8px;background:rgba(196,213,242,.12);overflow:hidden}
+  .timer{height:8px;border-radius:8px;background:rgba(199,107,68,.12);overflow:hidden}
   .timer i{display:block;height:100%;width:100%;background:var(--blue);transform-origin:left;border-radius:8px}
 
   .grid{display:grid;gap:10px}
-  .tile{aspect-ratio:1;border-radius:12px;cursor:pointer;border:2px solid transparent;transition:transform .08s, box-shadow .15s;box-shadow:0 4px 14px rgba(196,213,242,.08)}
+  .tile{aspect-ratio:1;border-radius:12px;cursor:pointer;border:2px solid transparent;transition:transform .08s, box-shadow .15s;box-shadow:0 4px 14px rgba(199,107,68,.08)}
   .tile:active{transform:scale(.96)}
-  .tile.correct{border-color:#c4d5f2;box-shadow:0 0 0 4px rgba(196,213,242,.25)}
-  .tile.wrong{border-color:#c4d5f2;box-shadow:0 0 0 4px rgba(196,213,242,.22)}
+  .tile.correct{border-color:#c76b44;box-shadow:0 0 0 4px rgba(199,107,68,.25)}
+  .tile.wrong{border-color:#c76b44;box-shadow:0 0 0 4px rgba(199,107,68,.22)}
 
-  .over{position:fixed;inset:0;background:rgba(199,107,68,.94);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;z-index:10}
+  .over{position:fixed;inset:0;background:rgba(196,213,242,.94);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;z-index:10}
   .over.show{display:flex}
   .over h1{font-family:var(--serif);font-size:clamp(40px,8vw,60px);font-weight:600;text-transform:uppercase;line-height:1}
   .over .big{font-family:var(--serif);font-size:clamp(64px,12vw,92px);color:var(--blue);line-height:1;margin:6px 0}
   .over p{color:var(--ink-soft);font-size:14px}
-  .btn{margin-top:20px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 32px;border:1px solid var(--blue);color:#c76b44;background:var(--blue);border-radius:40px;cursor:pointer}
+  .btn{margin-top:20px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 32px;border:1px solid var(--blue);color:#c4d5f2;background:var(--blue);border-radius:40px;cursor:pointer}
   .btn:hover{background:var(--blue-deep)}
   .btn.ghost{background:none;color:var(--blue);margin-left:8px}
-  .btn.ghost:hover{background:var(--blue);color:#c76b44}
+  .btn.ghost:hover{background:var(--blue);color:#c4d5f2}
 
-  :focus-visible{outline:3px solid #c4d5f2;outline-offset:5px}
+  :focus-visible{outline:3px solid #c76b44;outline-offset:5px}
   html{scroll-padding-top:100px}
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -142,7 +142,7 @@ function startTimer(){
   (function tick(now){
     const e=performance.now()-tStart, f=Math.max(0,1-e/roundTime);
     bar.style.transform='scaleX('+f+')';
-    bar.style.background = f<0.28 ? '#c4d5f2' : 'var(--blue)';
+    bar.style.background = f<0.28 ? '#c76b44' : 'var(--blue)';
     if(e>=roundTime && !locked){ timeout(); return; }
     if(!locked) raf=requestAnimationFrame(tick);
   })();
