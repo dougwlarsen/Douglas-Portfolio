@@ -38,11 +38,7 @@
   .nav-links a:hover{color:var(--blue)}
   .menu-btn{display:none;background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink)}
 
-  /* Sketches sit within the layout instead of floating over the content. */
-  .sketch-band{display:flex;gap:24px;align-items:center;max-width:1240px;margin:64px auto 0;padding:24px 40px 0;border-top:1px solid var(--line)}
-  .sketch-band img{display:block;flex:1 1 0;min-width:0;width:0;height:190px;object-fit:contain;mix-blend-mode:multiply;filter:grayscale(1);opacity:.58}
   section .wrap,header .wrap{position:relative;z-index:2}
-  @media(max-width:680px){.sketch-band{gap:12px;margin-top:36px;padding:18px 24px 0}.sketch-band img{height:120px}}
 
   /* Hero */
   header{position:relative;padding:190px 0 120px;overflow:hidden}
@@ -177,7 +173,7 @@
     .about-grid,.exp-cols,.duo{grid-template-columns:1fr;gap:36px}
     .stats{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:28px;flex-direction:row;flex-wrap:wrap;gap:24px 40px}
     .row{grid-template-columns:1fr;gap:14px}.row .meta{grid-row:auto;grid-column:1;justify-content:flex-start}
-    .sk{display:none}.lb-stage{padding:0 12px}
+    .lb-stage{padding:0 12px}
   }
 
   :focus-visible{outline:3px solid #c76b44;outline-offset:5px}
@@ -185,7 +181,7 @@
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *,*::before,*::after{animation:none!important;transition:none!important}
-    .reveal,.sk,.card{opacity:1;transform:none}
+    .reveal,.card{opacity:1;transform:none}
   }
   @media(max-width:480px){nav:not(.rail){gap:12px;flex-wrap:wrap}.brand{letter-spacing:.12em}}
 
@@ -223,7 +219,6 @@
       <a class="btn" href="#contact">Get in Touch</a>
     </div>
   </div>
-  <div class="sketch-band" aria-hidden="true"><img src="assets/illustrations/01.jpg" alt="" loading="lazy"><img src="assets/illustrations/08.jpg" alt="" loading="lazy"></div>
 </header>
 
 <!-- ABOUT -->
@@ -244,7 +239,6 @@
     </div>
     <a class="more-work reveal" href="journey.html">My Design Journey <span class="ar">↗</span></a>
   </div>
-  <div class="sketch-band" aria-hidden="true"><img src="assets/illustrations/07.jpg" alt="" loading="lazy"><img src="assets/illustrations/02.jpg" alt="" loading="lazy"></div>
 </section>
 
 <!-- WORK -->
@@ -255,7 +249,6 @@
     <a class="more-work reveal" href="custom-furniture.html">Custom furniture process <span class="ar">↗</span></a>
     <a class="more-work reveal" href="additional.html">Additional design work <span class="ar">↗</span></a>
   </div>
-  <div class="sketch-band" aria-hidden="true"><img src="assets/illustrations/03.jpg" alt="" loading="lazy"><img src="assets/illustrations/05.jpg" alt="" loading="lazy"><img src="assets/illustrations/11.jpg" alt="" loading="lazy"></div>
 </section>
 
 <!-- COLOR (blue inverted) -->
@@ -287,7 +280,6 @@
       </div>
     </div>
   </div>
-  <div class="sketch-band" aria-hidden="true"><img src="assets/illustrations/09.jpg" alt="" loading="lazy"><img src="assets/illustrations/10.jpg" alt="" loading="lazy"></div>
 </section>
 
 <!-- CAPABILITIES + EDU/REFS -->
@@ -312,7 +304,6 @@
       </div>
     </div>
   </div>
-  <div class="sketch-band" aria-hidden="true"><img src="assets/illustrations/06.jpg" alt="" loading="lazy"><img src="assets/illustrations/04.jpg" alt="" loading="lazy"></div>
 </section>
 
 <!-- CONTACT -->
