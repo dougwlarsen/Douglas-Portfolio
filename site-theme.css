@@ -1,0 +1,19 @@
+/* Shared navigation palette. */
+:root{--wine:#290c0c;--nav-text:#c4d5f2}
+nav:not(.rail),.top{background:var(--wine);color:var(--nav-text);border-bottom:1px solid rgba(196,213,242,.18)}
+nav:not(.rail) .brand,nav:not(.rail) .brand b,.top .brand,.top .brand b,nav:not(.rail) .tag{color:var(--nav-text)}
+nav:not(.rail) .nav-links a,nav:not(.rail) .menu-btn,nav:not(.rail) .back,.top .back{color:var(--nav-text)}
+nav:not(.rail) .back,.top .back{border-color:rgba(196,213,242,.5)}
+nav:not(.rail) .back:hover,.top .back:hover{background:var(--nav-text);border-color:var(--nav-text);color:var(--wine)}
+nav:not(.rail) .nav-links a:hover{color:var(--nav-text);text-decoration:underline;text-underline-offset:6px}
+nav:not(.rail) :focus-visible,.top :focus-visible{outline-color:var(--nav-text)}
+@media(max-width:860px){nav:not(.rail) .nav-links{background:var(--wine)}}
+/* The games strip and footer form one dark base to the homepage. */
+.contact::after{background-image:url("wave-bottom-wine.svg")}
+.fun{padding:40px 0 30px;background:var(--wine);color:var(--nav-text)}
+.fun .fun-label,.fun .fun-names a{color:var(--nav-text)}
+.fun .fun-names a:hover{color:var(--nav-text);text-decoration:underline;text-underline-offset:4px}
+.fun .dot{border-color:rgba(196,213,242,.65)}
+.fun :focus-visible{outline-color:var(--nav-text)}
+.fun + footer.wrap{max-width:none;background:var(--wine);color:var(--nav-text);border-top:1px solid rgba(196,213,242,.18);padding:26px max(40px,calc((100% - 1200px)/2))}
+@media(max-width:860px){.fun + footer.wrap{padding:26px 24px}}
