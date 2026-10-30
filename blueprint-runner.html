@@ -44,6 +44,7 @@
   @media(max-width:480px){nav:not(.rail){gap:12px;flex-wrap:wrap}.brand{letter-spacing:.12em}}
 </style>
 <link rel="stylesheet" href="site-theme.css">
+<link rel="stylesheet" href="game-theme.css">
 <script src="site-storage.js"></script>
 </head>
 <body>
@@ -66,8 +67,8 @@
 <script>
 const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 const W=900,H=420, GROUND=H-64;
-const BLUE='#c76b44', DEEP='#c76b44', CREAM='#c4d5f2';
-const SWATCH=['#c76b44','#c76b44','#c76b44','#c76b44','#c76b44','#c76b44'];
+const BLUE='#c76b44', DEEP='#2f2f26', CREAM='#c4d5f2';
+const SWATCH=['#290c0c','#2f2f26','#8c7366','#c4d5f2','#c76b44'];
 let dpr=Math.min(window.devicePixelRatio||1,2);
 cv.width=W*dpr; cv.height=H*dpr; ctx.scale(dpr,dpr);
 
@@ -91,7 +92,7 @@ const OBS_BAG=['chair','chair','diningchair','armchair','armchair','sofa','sofa'
 function spawnObstacle(){
   const kind=OBS_BAG[(Math.random()*OBS_BAG.length)|0];
   const [w,h]=OBS_DIM[kind];
-  obs.push({x:W+20,w,h,kind});
+  obs.push({x:W+20,w,h,kind,color:SWATCH[(Math.random()*SWATCH.length)|0]});
   // next spawn: gap scales with speed so it's always clearable
   spawnT=Math.max(50, (156 - speed*4) + Math.random()*70);
 }
@@ -164,20 +165,20 @@ function draw(){
   // HUD
   ctx.fillStyle=BLUE; ctx.font='600 30px Cormorant, serif';
   ctx.textAlign='left'; ctx.fillText(Math.floor(score()), 20, 40);
-  ctx.fillStyle='rgba(199,107,68,.5)'; ctx.font='500 10px Inter, sans-serif';
+  ctx.fillStyle='rgba(47,47,38,.85)'; ctx.font='500 10px Inter, sans-serif';
   ctx.fillText('SCORE', 21, 54);
-  ctx.textAlign='right'; ctx.fillStyle='rgba(199,107,68,.5)';
+  ctx.textAlign='right'; ctx.fillStyle='rgba(47,47,38,.85)';
   ctx.fillText('BEST '+best, W-20, 30);
   ctx.fillText(picks+' SWATCHES', W-20, 46);
-  ctx.textAlign='center'; ctx.fillStyle='rgba(199,107,68,.4)';
+  ctx.textAlign='center'; ctx.fillStyle='rgba(47,47,38,.85)';
   if(frame<160){ ctx.font='500 11px Inter, sans-serif'; ctx.fillText('TAP / SPACE TO JUMP  ·  DOUBLE-JUMP OK', W/2, H-20); }
 }
 function rrp(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
 function drawFurniture(o){
   const c=ctx, x=o.x, w=o.w, h=o.h, b=GROUND, t=b-h;
-  c.lineWidth=2; c.strokeStyle=BLUE; c.fillStyle='rgba(199,107,68,.05)';
+  c.lineWidth=2; c.strokeStyle=(o.color==='#290c0c'||o.color==='#2f2f26')?CREAM:DEEP; c.fillStyle=o.color;
   const rr=(a,y2,ww,hh,r)=>{rrp(c,a,y2,ww,hh,r||2);c.fill();c.stroke();};
-  const ln=(x1,y1,x2,y2)=>{c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();};
+  const ln=(x1,y1,x2,y2)=>{c.save();c.strokeStyle=DEEP;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();c.restore();};
   if(o.kind==='chair'){
     const s=b-h*0.5;
     rr(x,s,w,h*0.16,3);            // seat

@@ -1,0 +1,24 @@
+/* A shared palette for the three games. */
+:root{--game-wine:#290c0c;--game-charcoal:#2f2f26;--game-taupe:#8c7366;--game-blue:#c4d5f2;--game-orange:#c76b44;--ink:var(--game-charcoal);--ink-soft:var(--game-charcoal);--line:rgba(47,47,38,.2)}
+.stage{border-color:var(--game-taupe);box-shadow:0 20px 60px rgba(47,47,38,.16)}
+.hud{background:rgba(196,213,242,.94)}
+.hint{background:rgba(196,213,242,.9);padding:7px 12px}
+.over{background:rgba(41,12,12,.97);color:var(--game-blue)}
+.over p{color:var(--game-blue)}
+.over .big{color:var(--game-orange)}
+.btn{background:var(--game-wine);border-color:var(--game-wine);color:var(--game-blue)}
+.btn:hover{background:var(--game-charcoal);border-color:var(--game-charcoal)}
+.btn.ghost{background:transparent;border-color:var(--game-wine);color:var(--game-wine)}
+.btn.ghost:hover{background:var(--game-wine);color:var(--game-blue)}
+.over .btn{background:var(--game-blue);border-color:var(--game-blue);color:var(--game-wine)}
+.over .btn:hover{background:var(--game-orange);border-color:var(--game-orange);color:var(--game-wine)}
+.over .btn.ghost{background:transparent;border-color:var(--game-blue);color:var(--game-blue)}
+.over .btn.ghost:hover{background:var(--game-blue);color:var(--game-wine)}
+.over :focus-visible{outline-color:var(--game-blue)}
+.timer{background:rgba(140,115,102,.25)}
+.timer i{background:var(--game-taupe)}
+.tile.correct{border:3px solid var(--game-charcoal);box-shadow:0 0 0 4px rgba(47,47,38,.3)}
+.tile.wrong{border:3px dashed var(--game-wine);box-shadow:0 0 0 4px rgba(41,12,12,.3)}
+/* Keep scores clear of the fixed navigation on shorter screens. */
+body{padding-top:76px;padding-bottom:16px;box-sizing:border-box}
+.game{width:min(92vw,440px,calc((100dvh - 250px)*.76))}

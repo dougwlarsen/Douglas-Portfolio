@@ -48,8 +48,8 @@
   .stage{padding:96px 0;border-top:1px solid var(--line)}
   .stage-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
   .stage.alt .media{order:2}
-  .stage .num{font-family:var(--serif);font-size:clamp(60px,9vw,120px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px var(--blue);font-weight:600}
-  .stage .step{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);font-weight:600;margin:18px 0 10px}
+  .stage .num{font-family:var(--serif);font-size:clamp(60px,9vw,120px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px #8c7366;font-weight:600}
+  .stage .num{margin-bottom:28px}
   .stage h2{font-family:var(--serif);text-transform:uppercase;font-size:clamp(30px,4.2vw,58px);font-weight:500;line-height:1;letter-spacing:.01em}
   .stage p{margin-top:20px;font-size:17px;color:var(--ink-soft);max-width:46ch}
   .stage .tags{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
@@ -265,7 +265,7 @@
     sec.className='stage reveal'+(i%2?' alt':''); sec.id='s'+s.n;
     sec.innerHTML=`<div class="wrap stage-grid">
       <div class="media">${s.images.map(im=>`<figure class="${im.kind}"><img src="${im.src}" alt="${im.alt}" width="${im.width}" height="${im.height}" loading="lazy" decoding="async"><figcaption>${im.caption}</figcaption></figure>`).join('')}</div>
-      <div class="copy"><div class="num">${s.n}</div><div class="step">Step ${s.n}</div>
+      <div class="copy"><div class="num">${s.n}</div>
         <h2>${s.title}</h2><p>${s.copy}</p>
         <div class="tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
     </div>`;

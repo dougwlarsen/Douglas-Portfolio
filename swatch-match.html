@@ -63,6 +63,7 @@
   @media(max-width:480px){nav:not(.rail){gap:12px;flex-wrap:wrap}.brand{letter-spacing:.12em}}
 </style>
 <link rel="stylesheet" href="site-theme.css">
+<link rel="stylesheet" href="game-theme.css">
 <script src="site-storage.js"></script>
 </head>
 <body>
@@ -143,7 +144,7 @@ function startTimer(){
   (function tick(now){
     const e=performance.now()-tStart, f=Math.max(0,1-e/roundTime);
     bar.style.transform='scaleX('+f+')';
-    bar.style.background = f<0.28 ? '#c76b44' : 'var(--blue)';
+    bar.style.background = f<0.28 ? '#290c0c' : '#8c7366';
     if(e>=roundTime && !locked){ timeout(); return; }
     if(!locked) raf=requestAnimationFrame(tick);
   })();
